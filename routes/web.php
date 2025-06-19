@@ -106,21 +106,33 @@ Route::middleware('auth')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
     Route::put('/users/{id}', [UserController::class, 'update']);
 
-    // SIMPANAN
-    Route::get('setor-simpanan', fn() => view('simpanpinjam.setor-simpanan'))->name('setor.simpanan');
-    Route::get('/simpan-pinjam/setor-simpanan', [SetorSimpananController::class, 'index'])->name('setor.simpanan');
-    Route::post('/simpan-pinjam/setor-simpanan', [SetorSimpananController::class, 'store'])->name('setor.simpanan.store');
-    Route::delete('/simpan-pinjam/setor-simpanan/{id}', [SetorSimpananController::class, 'destroy'])->name('setor.simpanan.destroy');
+    Route::get('/perusahaan', function () {
+        return view('master.perusahaan', ['title' => 'Perusahaan']);
+    })->name('perusahaan');
 
-    Route::get('penarikan', fn() => view('simpanpinjam.penarikan'))->name('penarikan.simpanan');
+    Route::get('/jenis-usaha', function () {
+        return view('master.jenis-usaha', ['title' => 'Jenis Usaha']);
+    })->name('jenis-usaha');
 
-    // PINJAMAN
-    Route::get('pengajuan-pinjaman', fn() => view('simpanpinjam.pengajuan-pinjaman'))->name('pengajuan.pinjaman');
-    Route::get('approval-pinjaman', fn() => view('simpanpinjam.approval-pinjaman'))->name('approval.pinjaman');
+    Route::get('/anggota', function () {
+        return view('master.anggota', ['title' => 'Anggota']);
+    })->name('anggota');
 
-    // MENU LANGSUNG
-    Route::get('kartu-anggota', fn() => view('simpanpinjam.kartu-anggota'))->name('kartu.anggota');
-    Route::get('posting-shu', fn() => view('simpanpinjam.posting-shu'))->name('posting.shu');
+    Route::get('/tipe-dokumen', function () {
+        return view('master.tipe-dokumen', ['title' => 'Tipe Dokumen']);
+    })->name('tipe-dokumen');
+
+    Route::get('/pelanggan', function () {
+        return view('master.pelanggan', ['title' => 'Pelanggan']);
+    })->name('pelanggan');
+
+    Route::get('/pemasok', function () {
+        return view('master.pemasok', ['title' => 'Pemasok']);
+    })->name('pemasok');
+
+    Route::get('/dataassets', function () {
+        return view('master.assets', ['title' => 'Assets']);
+    })->name('dataassets');
 });
 
 

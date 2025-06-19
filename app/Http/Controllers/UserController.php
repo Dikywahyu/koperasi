@@ -46,6 +46,9 @@ class UserController extends Controller
             'raw_data' => $randomPassword
         ]);
 
+        // Assign role saja (permissions nanti mengikuti dari role tersebut)
+        $user->assignRole($request->role);
+
         return response()->json(['message' => 'User berhasil ditambahkan']);
     }
 
@@ -60,6 +63,9 @@ class UserController extends Controller
         ]);
 
         $user->update($validated);
+
+        // Sync role user
+        $user->syncRoles([$request->role]);
 
         return response()->json(['message' => 'User updated successfully']);
     }

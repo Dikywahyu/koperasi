@@ -1,0 +1,75 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\Menu;
+
+class MenuMaster extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $currentId = Menu::max('id') ?? 0;
+        $id = $currentId + 1;
+
+        // Menu Utama: Master
+        $master = Menu::create([
+            'id' => $id++,
+            'title' => 'Master',
+            'icon' => 'ri-database-2-line',
+            'route' => null,
+            'order' => $id,
+            'permission_id' => 1,
+        ]);
+
+        // Submenu langsung di bawah Master
+        $subs = [
+            ['Perusahaan', 'ri-community-line'],
+            ['Jenis Usaha', 'ri-shopping-bag-line'],
+            ['Anggota', 'ri-id-card-line'],
+            ['Tipe Dokumen', 'ri-layout-top-2-line'],
+            ['Pelanggan', 'ri-vip-crown-line'],
+            ['Pemasok', 'ri-shopping-basket-line'],
+            ['Assets', 'ri-roadster-line'],
+        ];
+
+        foreach ($subs as [$title, $icon]) {
+            Menu::create([
+                'id' => $id++,
+                'title' => $title,
+                'icon' => $icon,
+                'route' => 'layouts-container.html',
+                'parent_id' => $master->id,
+                'order' => $id,
+                'permission_id' => 1,
+            ]);
+        }
+
+        // SP Menu (child dari Master)
+        $sp = Menu::create([
+            'id' => $id++,
+            'title' => 'SP',
+            'icon' => 'ri-hand-heart-line',
+            'route' => null,
+            'parent_id' => $master->id,
+            'order' => $id,
+            'permission_id' => 1,
+        ]);
+
+        foreach (['Simpanan', 'Pinjaman'] as $title) {
+            Menu::create([
+                'id' => $id++,
+                'title' => $title,
+                'icon' => 'ri-circle-fill',
+                'route' => 'app-access-' . strtolower($title) . '.html',
+                'parent_id' => $sp->id,
+                'order' => $id,
+                'permission_id' => 1,
+            ]);
+        }
+    }
+}

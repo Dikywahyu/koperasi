@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('jenis_usahas', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

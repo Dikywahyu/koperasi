@@ -253,6 +253,9 @@ Route::middleware('auth')->group(function () {
         return view('laz.kwitansis', ['title' => 'Kwitansi']);
     })->name('kwitansi');
     Route::apiResource('kwitansis', KwitansiController::class);
+    Route::get('/kwitansi/proses-donasi', [KwitansiController::class, 'prosesDonasiAktif']);
+
+
 
 
     Route::get('/regional', function () {

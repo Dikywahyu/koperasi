@@ -2,19 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Donasi;
 use App\Models\Kwitansi;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class KwitansiController extends Controller
 {
+
+    public function prosesDonasiAktif()
+    {
+        $donasis = Donasi::where('status', 'aktif')
+            ->doesntHave('kwitansi') // hanya donasi yang belum punya kwitansi
+            ->get();
+
+        $jumlah = 0;
+
+        foreach ($donasis as $donasi) {
+            Kwitansi::create([
+                'donasi_id' => $donasi->id,
+                'total' => $donasi->nominal,
+                'komisi_zisco' => 0, // bisa Anda hitung berdasarkan aturan
+                'bulan_donasi' => $donasi->bulan_donasi,
+                'nomor_transaksi' => 'KW' . Carbon::parse($donasi->bulan_donasi)->format('Ym') . 'D' . str_pad($donasi->id, 4, '0', STR_PAD_LEFT) . strtoupper(Str::random(6)),
+                'dicetak' => false,
+            ]);
+            $jumlah++;
+        }
+
+        return response()->json([
+            'message' => "$jumlah kwitansi berhasil dibuat dari donasi aktif.",
+        ]);
+    }
+
     public function index()
     {
-        return response()->json(Kwitansi::with('donasi')->get());
+        return response()->json(Kwitansi::with([
+            'donasi.donatur',
+            'donasi.zisco',
+            'donasi.jenisDonasi'
+        ])->get());
     }
 
     public function show($id)
     {
-        return response()->json(Kwitansi::with('donasi')->findOrFail($id));
+        return response()->json(Kwitansi::with([
+            'donasi.donatur',
+            'donasi.zisco',
+            'donasi.jenisDonasi'
+        ])->findOrFail($id));
     }
 
     public function store(Request $request)

@@ -30,7 +30,7 @@
         </div>
         <div class="offcanvas-body flex-grow-1">
             <form class="add-new-record pt-0 row g-3" id="form-pelanggan">
-                <input type="hidden" id="pelanggan-id" name="id">
+                <input type="hidden" id="pelanggan-id" name="pelanggan-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
@@ -39,12 +39,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="pelanggan-nama"
+                                name="pelanggan-nama"
                                 class="form-control"
                                 placeholder="Nama"
                                 required />
-                            <label for="nama">Nama</label>
+                            <label for="pelanggan-nama">Nama</label>
                         </div>
                     </div>
                 </div>
@@ -54,11 +54,11 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="email"
-                            id="email"
-                            name="email"
+                            id="pelanggan-email"
+                            name="pelanggan-email"
                             class="form-control"
                             placeholder="Email" />
-                        <label for="email">Email</label>
+                        <label for="pelanggan-email">Email</label>
                     </div>
                 </div>
 
@@ -67,11 +67,11 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="text"
-                            id="telepon"
-                            name="telepon"
+                            id="pelanggan-telepon"
+                            name="pelanggan-telepon"
                             class="form-control"
                             placeholder="Telepon" />
-                        <label for="telepon">Telepon</label>
+                        <label for="pelanggan-telepon">Telepon</label>
                     </div>
                 </div>
 
@@ -79,12 +79,12 @@
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
                         <textarea
-                            id="alamat"
-                            name="alamat"
+                            id="pelanggan-alamat"
+                            name="pelanggan-alamat"
                             class="form-control"
                             placeholder="Alamat"
                             style="height: 100px"></textarea>
-                        <label for="alamat">Alamat</label>
+                        <label for="pelanggan-alamat">Alamat</label>
                     </div>
                 </div>
 

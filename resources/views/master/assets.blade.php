@@ -30,8 +30,8 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body flex-grow-1">
-            <form class="add-new-record pt-0 row g-3" id="form-asset">
-                <input type="hidden" id="asset-id" name="id">
+            <form class="add-new-record pt-0 row g-3" id="form-dataasset">
+                <input type="hidden" id="dataasset-id" name="dataasset-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
@@ -40,12 +40,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="dataasset-nama"
+                                name="dataasset-nama"
                                 class="form-control"
                                 placeholder="Nama Asset"
                                 required />
-                            <label for="nama">Nama Asset</label>
+                            <label for="dataasset-nama">Nama Asset</label>
                         </div>
                     </div>
                 </div>
@@ -57,12 +57,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="kode"
-                                name="kode"
+                                id="dataasset-kode"
+                                name="dataasset-kode"
                                 class="form-control"
                                 placeholder="Kode Unik"
                                 required />
-                            <label for="kode">Kode Unik</label>
+                            <label for="dataasset-kode">Kode Unik</label>
                         </div>
                     </div>
                 </div>
@@ -72,11 +72,11 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="text"
-                            id="kategori"
-                            name="kategori"
+                            id="dataasset-kategori"
+                            name="dataasset-kategori"
                             class="form-control"
                             placeholder="Kategori" />
-                        <label for="kategori">Kategori</label>
+                        <label for="dataasset-kategori">Kategori</label>
                     </div>
                 </div>
 
@@ -85,13 +85,13 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="number"
-                            id="jumlah"
-                            name="jumlah"
+                            id="dataasset-jumlah"
+                            name="dataasset-jumlah"
                             class="form-control"
                             min="1"
                             value="1"
                             required />
-                        <label for="jumlah">Jumlah</label>
+                        <label for="dataasset-jumlah">Jumlah</label>
                     </div>
                 </div>
 
@@ -100,10 +100,10 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="date"
-                            id="tanggal_beli"
-                            name="tanggal_beli"
+                            id="dataasset-tanggal-beli"
+                            name="dataasset-tanggal-beli"
                             class="form-control" />
-                        <label for="tanggal_beli">Tanggal Beli</label>
+                        <label for="dataasset-tanggal-beli">Tanggal Beli</label>
                     </div>
                 </div>
 
@@ -118,5 +118,5 @@
 </div>
 
 <!-- Script khusus asset -->
-<script src="{{ asset('js/master/asset.js') }}"></script>
+<script src="{{ asset('js/master/assets.js') }}"></script>
 @endsection

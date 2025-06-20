@@ -29,7 +29,7 @@
         </div>
         <div class="offcanvas-body flex-grow-1">
             <form class="add-new-record pt-0 row g-3" id="form-perusahaan">
-                <input type="hidden" id="perusahaan-id" name="id">
+                <input type="hidden" id="perusahaan-id" name="perusahaan-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
@@ -38,12 +38,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="perusahaan-nama"
+                                name="perusahaan-nama"
                                 class="form-control"
                                 placeholder="Nama Perusahaan"
                                 required />
-                            <label for="nama">Nama Perusahaan</label>
+                            <label for="perusahaan-nama">Nama Perusahaan</label>
                         </div>
                     </div>
                 </div>
@@ -54,10 +54,10 @@
                         <input
                             type="text"
                             class="form-control"
-                            id="alamat"
-                            name="alamat"
+                            id="perusahaan-alamat"
+                            name="perusahaan-alamat"
                             placeholder="Alamat" />
-                        <label for="alamat">Alamat</label>
+                        <label for="perusahaan-alamat">Alamat</label>
                     </div>
                 </div>
 
@@ -67,10 +67,10 @@
                         <input
                             type="text"
                             class="form-control"
-                            id="telepon"
-                            name="telepon"
+                            id="perusahaan-telepon"
+                            name="perusahaan-telepon"
                             placeholder="Telepon" />
-                        <label for="telepon">Telepon</label>
+                        <label for="perusahaan-telepon">Telepon</label>
                     </div>
                 </div>
 

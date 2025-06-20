@@ -30,7 +30,7 @@
         </div>
         <div class="offcanvas-body flex-grow-1">
             <form class="add-new-record pt-0 row g-3" id="form-pemasok">
-                <input type="hidden" id="pemasok-id" name="id">
+                <input type="hidden" id="pemasok-id" name="pemasok-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
@@ -39,12 +39,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="pemasok-nama"
+                                name="pemasok-nama"
                                 class="form-control"
                                 placeholder="Nama Pemasok"
                                 required />
-                            <label for="nama">Nama</label>
+                            <label for="pemasok-nama">Nama</label>
                         </div>
                     </div>
                 </div>
@@ -54,11 +54,11 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="text"
-                            id="kontak"
-                            name="kontak"
+                            id="pemasok-kontak"
+                            name="pemasok-kontak"
                             class="form-control"
                             placeholder="Kontak" />
-                        <label for="kontak">Kontak</label>
+                        <label for="pemasok-kontak">Kontak</label>
                     </div>
                 </div>
 
@@ -67,11 +67,11 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="text"
-                            id="alamat"
-                            name="alamat"
+                            id="pemasok-alamat"
+                            name="pemasok-alamat"
                             class="form-control"
                             placeholder="Alamat" />
-                        <label for="alamat">Alamat</label>
+                        <label for="pemasok-alamat">Alamat</label>
                     </div>
                 </div>
 
@@ -80,11 +80,11 @@
                     <div class="form-floating form-floating-outline">
                         <input
                             type="email"
-                            id="email"
-                            name="email"
+                            id="pemasok-email"
+                            name="pemasok-email"
                             class="form-control"
                             placeholder="Email" />
-                        <label for="email">Email</label>
+                        <label for="pemasok-email">Email</label>
                     </div>
                 </div>
 

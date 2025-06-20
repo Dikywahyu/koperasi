@@ -28,19 +28,19 @@
         </div>
         <div class="offcanvas-body flex-grow-1">
             <form class="add-new-record pt-0 row g-3" id="form-jenis-usaha">
-                <input type="hidden" id="jenis-usaha-id" name="id">
+                <input type="hidden" id="jenis-usaha-id" name="jenis-usaha-id">
                 <div class="col-sm-12">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text"><i class="ri-building-4-line"></i></span>
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="jenis-usaha-nama"
+                                name="jenis-usaha-nama"
                                 class="form-control"
                                 placeholder="Nama Jenis Usaha"
                                 required />
-                            <label for="nama">Nama Jenis Usaha</label>
+                            <label for="jenis-usaha-nama">Nama Jenis Usaha</label>
                         </div>
                     </div>
                 </div>
@@ -49,10 +49,10 @@
                         <textarea
                             class="form-control"
                             placeholder="Deskripsi"
-                            id="deskripsi"
-                            name="deskripsi"
+                            id="jenis-usaha-deskripsi"
+                            name="jenis-usaha-deskripsi"
                             style="height: 100px"></textarea>
-                        <label for="deskripsi">Deskripsi</label>
+                        <label for="jenis-usaha-deskripsi">Deskripsi</label>
                     </div>
                 </div>
                 <div class="col-sm-12">

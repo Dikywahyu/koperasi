@@ -29,7 +29,7 @@
         </div>
         <div class="offcanvas-body flex-grow-1">
             <form class="add-new-record pt-0 row g-3" id="form-tipe-dokumen">
-                <input type="hidden" id="tipe-dokumen-id" name="id">
+                <input type="hidden" id="tipe-dokumen-id" name="tipe-dokumen-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
@@ -38,12 +38,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="tipe-dokumen-nama"
+                                name="tipe-dokumen-nama"
                                 class="form-control"
                                 placeholder="Nama Tipe Dokumen"
                                 required />
-                            <label for="nama">Nama</label>
+                            <label for="tipe-dokumen-nama">Nama</label>
                         </div>
                     </div>
                 </div>
@@ -55,12 +55,12 @@
                         <div class="form-floating form-floating-outline">
                             <input
                                 type="text"
-                                id="kode"
-                                name="kode"
+                                id="tipe-dokumen-kode"
+                                name="tipe-dokumen-kode"
                                 class="form-control"
                                 placeholder="Kode Tipe Dokumen"
                                 required />
-                            <label for="kode">Kode</label>
+                            <label for="tipe-dokumen-kode">Kode</label>
                         </div>
                     </div>
                 </div>
@@ -69,12 +69,12 @@
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
                         <textarea
-                            id="deskripsi"
-                            name="deskripsi"
+                            id="tipe-dokumen-deskripsi"
+                            name="tipe-dokumen-deskripsi"
                             class="form-control"
                             placeholder="Deskripsi"
                             style="height: 100px"></textarea>
-                        <label for="deskripsi">Deskripsi</label>
+                        <label for="tipe-dokumen-deskripsi">Deskripsi</label>
                     </div>
                 </div>
 

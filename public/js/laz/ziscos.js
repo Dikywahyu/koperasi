@@ -15,8 +15,13 @@ $(function () {
                 title: "No",
                 render: (data, type, row, meta) => meta.row + 1,
             },
-            { data: "nama", title: "Nama" },
-            { data: "lokasi", title: "Lokasi" },
+            { data: "nama", title: "Nama Zisco" },
+            { data: "lokasi", title: "Lokasi", defaultContent: "-" },
+            {
+                data: "cabang.nama",
+                title: "Cabang",
+                defaultContent: "-",
+            },
             {
                 data: "user.name",
                 title: "User",
@@ -43,8 +48,9 @@ $(function () {
                 action: function () {
                     $("#form-zisco")[0].reset();
                     $("#zisco-id").val("");
-                    offCanvas.show();
                     loadUsers();
+                    loadCabangs();
+                    offCanvas.show();
                 },
             },
         ],
@@ -52,28 +58,42 @@ $(function () {
         pageLength: 10,
     });
 
-    function loadUsers() {
-        $.get("/users", function (users) {
+    const loadUsers = () => {
+        return $.get("/users", function (data) {
             const select = $("#zisco-user");
             select.empty().append(`<option value="">-- Pilih User --</option>`);
-            users.forEach((user) => {
-                select.append(
-                    `<option value="${user.id}">${user.name}</option>`
-                );
+            data.forEach(u => {
+                select.append(`<option value="${u.id}">${u.name}</option>`);
             });
         });
-    }
+    };
 
+    const loadCabangs = () => {
+        return $.get("/cabangs", function (data) {
+            const select = $("#zisco-cabang");
+            select.empty().append(`<option value="">-- Pilih Cabang --</option>`);
+            data.forEach(c => {
+                select.append(`<option value="${c.id}">${c.nama}</option>`);
+            });
+        });
+    };
+
+    // Untuk form edit Zisco
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
-        $.get(`/ziscos/${id}`, function (data) {
-            $("#zisco-id").val(data.id);
-            $("#zisco-nama").val(data.nama);
-            $("#zisco-lokasi").val(data.lokasi);
-            $("#zisco-user").val(data.user_id);
-            offCanvas.show();
-        });
+
+        Promise.all([loadUsers(), loadCabangs()])
+            .then(() => $.get(`/ziscos/${id}`))
+            .then((data) => {
+                $("#zisco-id").val(data.id);
+                $("#zisco-nama").val(data.nama);
+                $("#zisco-lokasi").val(data.lokasi);
+                $("#zisco-user").val(data.user_id);
+                $("#zisco-cabang").val(data.cabang_id);
+                offCanvas.show();
+            });
     });
+
 
     $(document).on("click", ".btn-delete", function () {
         const id = $(this).data("id");
@@ -99,7 +119,8 @@ $(function () {
                         table.DataTable().ajax.reload();
                         Swal.fire({
                             icon: "success",
-                            title: "Dihapus!",
+                            title: "Berhasil",
+                            text: "Data berhasil dihapus",
                             timer: 1500,
                             showConfirmButton: false,
                         });
@@ -122,6 +143,7 @@ $(function () {
                 nama: $("#zisco-nama").val(),
                 lokasi: $("#zisco-lokasi").val(),
                 user_id: $("#zisco-user").val(),
+                cabang_id: $("#zisco-cabang").val(),
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function () {
@@ -129,7 +151,7 @@ $(function () {
                 Swal.fire({
                     icon: "success",
                     title: "Berhasil",
-                    text: id ? "Data diperbarui" : "Data ditambahkan",
+                    text: id ? "Berhasil Update" : "Berhasil Tambah",
                     timer: 2000,
                     showConfirmButton: false,
                 });
@@ -138,7 +160,11 @@ $(function () {
                 offCanvas.hide();
             },
             error: function (xhr) {
-                Swal.fire("Gagal", xhr.responseJSON.message, "error");
+                Swal.fire(
+                    "Gagal",
+                    Object.values(xhr.responseJSON.errors).join("<br>"),
+                    "error"
+                );
             },
         });
     });

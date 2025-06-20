@@ -10,8 +10,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Jenis</th>
-                        <th>Deskripsi</th>
+                        <th>Kode</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -22,47 +21,31 @@
         </div>
     </div>
 
-    <!-- Form Tambah/Edit Jenis Donasi -->
+    <!-- Form Tambah/Edit Regional -->
     <div class="offcanvas offcanvas-end" id="add-new-record">
         <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title">Tambah / Edit Jenis Donasi</h5>
+            <h5 class="offcanvas-title">Tambah / Edit Regional</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body flex-grow-1">
-            <form class="add-new-record pt-0 row g-3" id="form-jenis-donasi">
-                <input type="hidden" id="jenis-id" name="jenis-id">
+            <form class="add-new-record pt-0 row g-3" id="form-regional">
+                <input type="hidden" id="regional-id" name="regional-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" id="jenis-nama" name="jenis-nama" class="form-control" required />
-                        <label for="jenis-nama">Nama</label>
+                        <input type="text" id="regional-nama" name="regional-nama" class="form-control" required />
+                        <label for="regional-nama">Nama Regional</label>
                     </div>
                 </div>
 
-                <!-- Jenis -->
+                <!-- Kode -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <select id="jenis-tipe" name="jenis-tipe" class="form-select" required>
-                            <option value="">-- Pilih Jenis --</option>
-                            <option value="Zakat">Zakat</option>
-                            <option value="Infak">Infak</option>
-                            <option value="Wakaf">Wakaf</option>
-                        </select>
-                        <label for="jenis-tipe">Jenis</label>
+                        <input type="text" id="regional-kode" name="regional-kode" class="form-control" />
+                        <label for="regional-kode">Kode Regional</label>
                     </div>
                 </div>
-                <div class="col-sm-12">
-                    <div class="form-floating form-floating-outline">
-                        <select id="jenis-deskripsi" name="jenis-deskripsi" class="form-select" required>
-                            <option value="">-- Pilih Deskripsi --</option>
-                            <option value="RUTIN">RUTIN</option>
-                            <option value="INSIDENTIL">INSIDENTIL</option>
-                        </select>
-                        <label for="jenis-deskripsi">Deskripsi</label>
-                    </div>
-                </div>
-
 
                 <!-- Tombol -->
                 <div class="col-sm-12">
@@ -75,5 +58,5 @@
 </div>
 
 <!-- JS -->
-<script src="{{ asset('js/laz/jenis-donasis.js') }}"></script>
+<script src="{{ asset('js/laz/regional.js') }}"></script>
 @endsection

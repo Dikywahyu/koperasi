@@ -4,46 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\JenisDonasi;
 use Illuminate\Http\Request;
+use App\Imports\JenisDonasiImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JenisDonasiController extends Controller
 {
     public function index()
     {
-        $jenisDonasis = JenisDonasi::latest()->get();
-        return response()->json($jenisDonasis);
+        return response()->json(JenisDonasi::with('donasis')->get());
+    }
+
+    public function show($id)
+    {
+        return response()->json(JenisDonasi::with('donasis')->findOrFail($id));
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $data = $request->validate([
             'nama' => 'required|string|max:255',
             'jenis' => 'required|in:Zakat,Infak,Wakaf',
             'deskripsi' => 'nullable|string',
         ]);
 
-        $jenisDonasi = JenisDonasi::create($validated);
-
+        $jenisDonasi = JenisDonasi::create($data);
         return response()->json($jenisDonasi, 201);
-    }
-
-    public function show($id)
-    {
-        $jenisDonasi = JenisDonasi::findOrFail($id);
-        return response()->json($jenisDonasi);
     }
 
     public function update(Request $request, $id)
     {
         $jenisDonasi = JenisDonasi::findOrFail($id);
 
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'jenis' => 'required|in:Zakat,Infak,Wakaf',
+        $data = $request->validate([
+            'nama' => 'sometimes|string|max:255',
+            'jenis' => 'sometimes|in:Zakat,Infak,Wakaf',
             'deskripsi' => 'nullable|string',
         ]);
 
-        $jenisDonasi->update($validated);
-
+        $jenisDonasi->update($data);
         return response()->json($jenisDonasi);
     }
 
@@ -52,6 +50,17 @@ class JenisDonasiController extends Controller
         $jenisDonasi = JenisDonasi::findOrFail($id);
         $jenisDonasi->delete();
 
-        return response()->json(['message' => 'Jenis Donasi deleted']);
+        return response()->json(['message' => 'Jenis donasi deleted']);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new JenisDonasiImport, $request->file('file'));
+
+        return response()->json(['message' => 'Import jenis donasi berhasil']);
     }
 }

@@ -6,7 +6,7 @@ $(function () {
 
     table.DataTable({
         ajax: {
-            url: "/kwitansis",
+            url: "/regionals",
             dataSrc: "",
         },
         columns: [
@@ -15,16 +15,8 @@ $(function () {
                 title: "No",
                 render: (data, type, row, meta) => meta.row + 1,
             },
-            { data: "nomor_transaksi", title: "Nomor Transaksi" },
-            { data: "donasi.donatur.nama", title: "Donasi", defaultContent: "-" },
-            { data: "total", title: "Total", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
-            { data: "komisi_zisco", title: "Komisi Zisco", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
-            { data: "bulan_donasi", title: "Bulan Donasi" },
-            {
-                data: "dicetak",
-                title: "Status Cetak",
-                render: d => d ? "Sudah" : "Belum",
-            },
+            { data: "nama", title: "Nama Regional" },
+            { data: "kode", title: "Kode" },
             {
                 data: "id",
                 title: "Aksi",
@@ -41,13 +33,11 @@ $(function () {
             '<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
             {
-                text: '<i class="ri-add-line"></i> Tambah Kwitansi',
+                text: '<i class="ri-add-line"></i> Tambah Regional',
                 className: "btn btn-primary",
                 action: function () {
-                    $("#form-kwitansi")[0].reset();
-                    $("#kwitansi-id").val("");
-                    $("#kwitansi-dicetak").prop("checked", false);
-                    loadDonasi();
+                    $("#form-regional")[0].reset();
+                    $("#regional-id").val("");
                     offCanvas.show();
                 },
             },
@@ -56,28 +46,12 @@ $(function () {
         pageLength: 10,
     });
 
-    function loadDonasi() {
-        $.get("/donasis", function (data) {
-            const select = $("#kwitansi-donasi");
-            select.empty().append(`<option value="">-- Pilih Donasi --</option>`);
-            data.forEach((d) => {
-                select.append(`<option value="${d.id}">${d.donatur?.nama ?? '-'} - Rp ${parseFloat(d.nominal).toLocaleString()}</option>`);
-            });
-        });
-    }
-
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
-        $.get(`/kwitansis/${id}`, function (data) {
-            $("#kwitansi-id").val(data.id);
-            $("#kwitansi-total").val(data.total);
-            $("#kwitansi-komisi").val(data.komisi_zisco);
-            $("#kwitansi-bulan").val(data.bulan_donasi);
-            $("#kwitansi-dicetak").prop("checked", data.dicetak);
-            loadDonasi();
-            setTimeout(() => {
-                $("#kwitansi-donasi").val(data.donasi_id);
-            }, 100);
+        $.get(`/regionals/${id}`, function (data) {
+            $("#regional-id").val(data.id);
+            $("#regional-nama").val(data.nama);
+            $("#regional-kode").val(data.kode);
             offCanvas.show();
         });
     });
@@ -97,7 +71,7 @@ $(function () {
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: `/kwitansis/${id}`,
+                    url: `/regionals/${id}`,
                     method: "DELETE",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr("content"),
@@ -117,21 +91,18 @@ $(function () {
         });
     });
 
-    $("#form-kwitansi").on("submit", function (e) {
+    $("#form-regional").on("submit", function (e) {
         e.preventDefault();
-        const id = $("#kwitansi-id").val();
+        const id = $("#regional-id").val();
         const method = id ? "PUT" : "POST";
-        const url = id ? `/kwitansis/${id}` : `/kwitansis`;
+        const url = id ? `/regionals/${id}` : `/regionals`;
 
         $.ajax({
             url: url,
             method: method,
             data: {
-                donasi_id: $("#kwitansi-donasi").val(),
-                total: $("#kwitansi-total").val(),
-                komisi_zisco: $("#kwitansi-komisi").val(),
-                bulan_donasi: $("#kwitansi-bulan").val(),
-                dicetak: $("#kwitansi-dicetak").is(":checked"),
+                nama: $("#regional-nama").val(),
+                kode: $("#regional-kode").val(),
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function () {
@@ -143,8 +114,8 @@ $(function () {
                     timer: 2000,
                     showConfirmButton: false,
                 });
-                $("#form-kwitansi")[0].reset();
-                $("#kwitansi-id").val("");
+                $("#form-regional")[0].reset();
+                $("#regional-id").val("");
                 offCanvas.hide();
             },
             error: function (xhr) {

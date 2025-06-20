@@ -53,30 +53,32 @@ $(function () {
         pageLength: 10,
     });
 
-    function loadDonaturs() {
-        $.get("/donaturs", function (donaturs) {
+    const loadDonaturs = () => {
+        return $.get("/donaturs", function (data) {
             const select = $("#instansi-penanggung-jawab");
-            select
-                .empty()
-                .append(
-                    `<option value="">-- Pilih Penanggung Jawab --</option>`
-                );
-            donaturs.forEach((d) => {
+            select.empty().append(`<option value="">-- Pilih Penanggung Jawab --</option>`);
+            data.forEach(d => {
                 select.append(`<option value="${d.id}">${d.nama}</option>`);
             });
         });
-    }
+    };
+
 
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
-        $.get(`/instansis/${id}`, function (data) {
-            $("#instansi-id").val(data.id);
-            $("#instansi-nama").val(data.nama);
-            $("#instansi-alamat").val(data.alamat);
-            $("#instansi-telepon").val(data.telepon);
-            $("#instansi-penanggung-jawab").val(data.penanggung_jawab_id);
-            offCanvas.show();
-        });
+
+        loadDonaturs()
+            .then(() => {
+                return $.get(`/instansis/${id}`);
+            })
+            .then((data) => {
+                $("#instansi-id").val(data.id);
+                $("#instansi-nama").val(data.nama);
+                $("#instansi-alamat").val(data.alamat);
+                $("#instansi-telepon").val(data.telepon);
+                $("#instansi-penanggung-jawab").val(data.penanggung_jawab_id);
+                offCanvas.show();
+            });
     });
 
     $(document).on("click", ".btn-delete", function () {

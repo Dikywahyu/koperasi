@@ -4,6 +4,38 @@ $(function () {
     const offCanvas = new bootstrap.Offcanvas(offCanvasElement);
     if (!table.length) return;
 
+    // ===== Load dropdowns
+    const loadJenisDonasis = () => {
+        return $.get("/jenis-donasis", function (data) {
+            const select = $("#donasi-jenis");
+            select.empty().append(`<option value="">-- Pilih Jenis Donasi --</option>`);
+            data.forEach(j => {
+                select.append(`<option value="${j.id}">${j.nama}</option>`);
+            });
+        });
+    };
+
+    const loadZiscos = () => {
+        return $.get("/ziscos", function (data) {
+            const select = $("#donasi-zisco");
+            select.empty().append(`<option value="">-- Pilih Zisco (Opsional) --</option>`);
+            data.forEach(z => {
+                select.append(`<option value="${z.id}">${z.nama}</option>`);
+            });
+        });
+    };
+
+    const loadDonatursForDonasi = () => {
+        return $.get("/donaturs", function (data) {
+            const select = $("#donasi-donatur");
+            select.empty().append(`<option value="">-- Pilih Donatur --</option>`);
+            data.forEach(d => {
+                select.append(`<option value="${d.id}">${d.nama}</option>`);
+            });
+        });
+    };
+
+    // ===== Init DataTable
     table.DataTable({
         ajax: {
             url: "/donasis",
@@ -15,32 +47,14 @@ $(function () {
                 title: "No",
                 render: (data, type, row, meta) => meta.row + 1,
             },
-            { data: "donatur.nama", title: "Donatur" },
-            { data: "jenis_donasi.nama", title: "Jenis Donasi" },
-            {
-                data: "zisco.nama",
-                title: "Zisco",
-                defaultContent: "-",
-            },
-            {
-                data: "nominal",
-                title: "Nominal",
-                render: (data) =>
-                    new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                    }).format(data),
-            },
-            {
-                data: "bulan_donasi",
-                title: "Bulan Donasi",
-                render: (data) => {
-                    if (!data) return "-";
-                    const date = new Date(data);
-                    return `${date.getMonth() + 1}-${date.getFullYear()}`;
-                },
-            },
-            { data: "metode", title: "Metode" },
+            { data: "donatur.nama", title: "Donatur", defaultContent: "-" },
+            { data: "zisco.nama", title: "Zisco", defaultContent: "-" },
+            { data: "jenis_donasi.nama", title: "Jenis ", defaultContent: "-" },
+            { data: "nominal", title: "Nominal", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
+            { data: "bulan_donasi", title: "Awal " },
+            { data: "metode", title: "Metode", defaultContent: "-" },
+            { data: "status", title: "Status", render: d => d === 'aktif' ? '✅ Aktif' : '❌ Nonaktif' },
+
             {
                 data: "id",
                 title: "Aksi",
@@ -62,10 +76,13 @@ $(function () {
                 action: function () {
                     $("#form-donasi")[0].reset();
                     $("#donasi-id").val("");
-                    loadDonaturs();
-                    loadJenisDonasi();
-                    loadZiscos();
-                    offCanvas.show();
+                    Promise.all([
+                        loadDonatursForDonasi(),
+                        loadZiscos(),
+                        loadJenisDonasis()
+                    ]).then(() => {
+                        offCanvas.show();
+                    });
                 },
             },
         ],
@@ -73,64 +90,33 @@ $(function () {
         pageLength: 10,
     });
 
-    function loadDonaturs() {
-        $.get("/donaturs", function (res) {
-            const select = $("#donasi-donatur");
-            select
-                .empty()
-                .append(`<option value="">-- Pilih Donatur --</option>`);
-            res.forEach((item) => {
-                select.append(
-                    `<option value="${item.id}">${item.nama}</option>`
-                );
-            });
-        });
-    }
-
-    function loadJenisDonasi() {
-        $.get("/jenis-donasis", function (res) {
-            const select = $("#donasi-jenis");
-            select
-                .empty()
-                .append(`<option value="">-- Pilih Jenis --</option>`);
-            res.forEach((item) => {
-                select.append(
-                    `<option value="${item.id}">${item.nama}</option>`
-                );
-            });
-        });
-    }
-
-    function loadZiscos() {
-        $.get("/ziscos", function (res) {
-            const select = $("#donasi-zisco");
-            select
-                .empty()
-                .append(
-                    `<option value="">-- Pilih Zisco (Opsional) --</option>`
-                );
-            res.forEach((item) => {
-                select.append(
-                    `<option value="${item.id}">${item.nama}</option>`
-                );
-            });
-        });
-    }
-
+    // ====== Edit Donasi
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
-        $.get(`/donasis/${id}`, function (data) {
-            $("#donasi-id").val(data.id);
-            $("#donasi-donatur").val(data.donatur_id);
-            $("#donasi-jenis").val(data.jenis_donasi_id);
-            $("#donasi-zisco").val(data.zisco_id);
-            $("#donasi-nominal").val(data.nominal);
-            $("#donasi-bulan").val(data.bulan_donasi);
-            $("#donasi-metode").val(data.metode);
-            offCanvas.show();
-        });
+
+        Promise.all([
+            loadDonatursForDonasi(),
+            loadZiscos(),
+            loadJenisDonasis()
+        ])
+            .then(() => {
+                return $.get(`/donasis/${id}`);
+            })
+            .then((data) => {
+                $("#donasi-id").val(data.id);
+                $("#donasi-nominal").val(data.nominal);
+                $("#donasi-bulan").val(data.bulan_donasi);
+                $("#donasi-metode").val(data.metode);
+                $("#donasi-donatur").val(data.donatur_id);
+                $("#donasi-zisco").val(data.zisco_id);
+                $("#donasi-jenis").val(data.jenis_donasi_id);
+                $("#donasi-status").val(data.status);
+
+                offCanvas.show();
+            });
     });
 
+    // ====== Hapus Donasi
     $(document).on("click", ".btn-delete", function () {
         const id = $(this).data("id");
         Swal.fire({
@@ -166,6 +152,7 @@ $(function () {
         });
     });
 
+    // ====== Submit Form
     $("#form-donasi").on("submit", function (e) {
         e.preventDefault();
         const id = $("#donasi-id").val();
@@ -176,12 +163,13 @@ $(function () {
             url: url,
             method: method,
             data: {
-                donatur_id: $("#donasi-donatur").val(),
-                jenis_donasi_id: $("#donasi-jenis").val(),
-                zisco_id: $("#donasi-zisco").val(),
                 nominal: $("#donasi-nominal").val(),
                 bulan_donasi: $("#donasi-bulan").val(),
                 metode: $("#donasi-metode").val(),
+                donatur_id: $("#donasi-donatur").val(),
+                zisco_id: $("#donasi-zisco").val(),
+                status: $("#donasi-status").val(),
+                jenis_donasi_id: $("#donasi-jenis").val(),
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function () {

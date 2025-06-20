@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class Kwitansi extends Model
 {
@@ -26,14 +27,16 @@ class Kwitansi extends Model
         static::creating(function ($kwitansi) {
             if (empty($kwitansi->nomor_transaksi)) {
                 $prefix = 'KW';
+                $bulanDonasi = $kwitansi->bulan_donasi ?? now();
+                $dateCode = Carbon::parse($bulanDonasi)->format('Ym');
+                $donasiPart = 'D' . str_pad($kwitansi->donasi_id ?? 0, 4, '0', STR_PAD_LEFT);
 
-                $bulanDonasi = $kwitansi->bulan_donasi ?? now(); // fallback ke now() kalau belum ada
-                $dateCode = \Carbon\Carbon::parse($bulanDonasi)->format('Ym'); // 202506
+                do {
+                    $random = strtoupper(Str::random(6));
+                    $nomor = $prefix . $dateCode . $donasiPart . $random;
+                } while (self::where('nomor_transaksi', $nomor)->exists());
 
-                $donasiPart = 'D' . str_pad($kwitansi->donasi_id ?? 0, 4, '0', STR_PAD_LEFT); // D0015
-                $random = strtoupper(Str::random(6)); // ABC123
-
-                $kwitansi->nomor_transaksi = $prefix . $dateCode . $donasiPart . $random;
+                $kwitansi->nomor_transaksi = $nomor;
             }
         });
     }

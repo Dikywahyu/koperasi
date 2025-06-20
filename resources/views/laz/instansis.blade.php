@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- DataTable -->
@@ -43,7 +44,7 @@
                 <!-- Alamat -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <textarea id="instansi-alamat" name="instansi-alamat" class="form-control" rows="2"></textarea>
+                        <input type="text" id="instansi-alamat" name="instansi-alamat" class="form-control" />
                         <label for="instansi-alamat">Alamat</label>
                     </div>
                 </div>
@@ -59,11 +60,11 @@
                 <!-- Penanggung Jawab -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <select id="instansi-penanggung-jawab" name="instansi-penanggung-jawab" class="form-select">
+                        <select id="instansi-penanggung" name="instansi-penanggung" class="form-select">
                             <option value="">-- Pilih Donatur --</option>
                             <!-- Diisi via JS -->
                         </select>
-                        <label for="instansi-penanggung-jawab">Penanggung Jawab</label>
+                        <label for="instansi-penanggung">Penanggung Jawab</label>
                     </div>
                 </div>
 

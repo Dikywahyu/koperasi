@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- DataTable -->
@@ -14,6 +15,7 @@
                         <th>Nominal</th>
                         <th>Bulan Donasi</th>
                         <th>Metode</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -78,8 +80,8 @@
                 <!-- Bulan Donasi -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <input type="month" id="donasi-bulan" name="donasi-bulan" class="form-control" required />
-                        <label for="donasi-bulan">Bulan Donasi</label>
+                        <input type="date" id="donasi-bulan" name="donasi-bulan" class="form-control" required />
+                        <label for="donasi-bulan">Awal Donasi</label>
                     </div>
                 </div>
 
@@ -88,6 +90,17 @@
                     <div class="form-floating form-floating-outline">
                         <input type="text" id="donasi-metode" name="donasi-metode" class="form-control" />
                         <label for="donasi-metode">Metode Pembayaran</label>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <select id="donasi-status" name="donasi-status" class="form-select" required>
+                            <option value="aktif">Aktif</option>
+                            <option value="nonaktif">Nonaktif</option>
+                        </select>
+                        <label for="donasi-status">Status Donasi</label>
                     </div>
                 </div>
 

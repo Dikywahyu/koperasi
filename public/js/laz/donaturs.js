@@ -15,13 +15,18 @@ $(function () {
                 title: "No",
                 render: (data, type, row, meta) => meta.row + 1,
             },
-            { data: "nama", title: "Nama Donatur" },
-            { data: "kode_donatur", title: "Kode" },
+            { data: "nama", title: "Nama" },
+            { data: "kode_donatur", title: "Kode Donatur" },
             { data: "alamat", title: "Alamat" },
             { data: "kontak", title: "Kontak" },
             {
                 data: "instansi.nama",
                 title: "Instansi",
+                defaultContent: "-",
+            },
+            {
+                data: "zisco.nama",
+                title: "Zisco",
                 defaultContent: "-",
             },
             {
@@ -50,8 +55,9 @@ $(function () {
                 action: function () {
                     $("#form-donatur")[0].reset();
                     $("#donatur-id").val("");
-                    loadUsers();
-                    loadInstansis();
+                    loadInstansi();
+                    loadZisco();
+                    loadUser();
                     offCanvas.show();
                 },
             },
@@ -60,41 +66,56 @@ $(function () {
         pageLength: 10,
     });
 
-    function loadUsers() {
-        $.get("/users", function (users) {
+    const loadInstansi = () => {
+        return $.get("/instansis", function (data) {
+            const select = $("#donatur-instansi");
+            select.empty().append(`<option value="">-- Pilih Instansi --</option>`);
+            data.forEach(i => {
+                select.append(`<option value="${i.id}">${i.nama}</option>`);
+            });
+        });
+    };
+
+    const loadZisco = () => {
+        return $.get("/ziscos", function (data) {
+            const select = $("#donatur-zisco");
+            select.empty().append(`<option value="">-- Pilih Zisco --</option>`);
+            data.forEach(z => {
+                select.append(`<option value="${z.id}">${z.nama}</option>`);
+            });
+        });
+    };
+
+    const loadUser = () => {
+        return $.get("/users", function (data) {
             const select = $("#donatur-user");
             select.empty().append(`<option value="">-- Pilih User --</option>`);
-            users.forEach((u) =>
-                select.append(`<option value="${u.id}">${u.name}</option>`)
-            );
+            data.forEach(u => {
+                select.append(`<option value="${u.id}">${u.name}</option>`);
+            });
         });
-    }
-
-    function loadInstansis() {
-        $.get("/instansis", function (data) {
-            const select = $("#donatur-instansi");
-            select
-                .empty()
-                .append(`<option value="">-- Pilih Instansi --</option>`);
-            data.forEach((i) =>
-                select.append(`<option value="${i.id}">${i.nama}</option>`)
-            );
-        });
-    }
+    };
 
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
-        $.get(`/donaturs/${id}`, function (data) {
-            $("#donatur-id").val(data.id);
-            $("#donatur-nama").val(data.nama);
-            $("#donatur-kode").val(data.kode_donatur);
-            $("#donatur-alamat").val(data.alamat);
-            $("#donatur-kontak").val(data.kontak);
-            $("#donatur-user").val(data.user_id);
-            $("#donatur-instansi").val(data.instansi_id);
-            offCanvas.show();
-        });
+
+        Promise.all([loadInstansi(), loadZisco(), loadUser()])
+            .then(() => {
+                return $.get(`/donaturs/${id}`);
+            })
+            .then((data) => {
+                $("#donatur-id").val(data.id);
+                $("#donatur-nama").val(data.nama);
+                $("#donatur-kode").val(data.kode_donatur);
+                $("#donatur-alamat").val(data.alamat);
+                $("#donatur-kontak").val(data.kontak);
+                $("#donatur-instansi").val(data.instansi_id);
+                $("#donatur-zisco").val(data.zisco_id);
+                $("#donatur-user").val(data.user_id);
+                offCanvas.show();
+            });
     });
+
 
     $(document).on("click", ".btn-delete", function () {
         const id = $(this).data("id");
@@ -145,8 +166,9 @@ $(function () {
                 kode_donatur: $("#donatur-kode").val(),
                 alamat: $("#donatur-alamat").val(),
                 kontak: $("#donatur-kontak").val(),
-                user_id: $("#donatur-user").val(),
                 instansi_id: $("#donatur-instansi").val(),
+                zisco_id: $("#donatur-zisco").val(),
+                user_id: $("#donatur-user").val(),
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function () {

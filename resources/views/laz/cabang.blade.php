@@ -10,9 +10,10 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Cabang</th>
-                        <th>Lokasi</th>
-                        <th>User</th>
+                        <th>Kode</th>
+                        <th>Alamat</th>
+                        <th>Telepon</th>
+                        <th>Regional</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -23,51 +24,56 @@
         </div>
     </div>
 
-    <!-- Form Tambah/Edit Zisco -->
+    <!-- Form Tambah/Edit Cabang -->
     <div class="offcanvas offcanvas-end" id="add-new-record">
         <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title">Tambah / Edit Zisco</h5>
+            <h5 class="offcanvas-title">Tambah / Edit Cabang</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body flex-grow-1">
-            <form class="add-new-record pt-0 row g-3" id="form-zisco">
-                <input type="hidden" id="zisco-id" name="zisco-id">
+            <form class="add-new-record pt-0 row g-3" id="form-cabang">
+                <input type="hidden" id="cabang-id" name="cabang-id">
 
                 <!-- Nama -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" id="zisco-nama" name="zisco-nama" class="form-control" required />
-                        <label for="zisco-nama">Nama Zisco</label>
+                        <input type="text" id="cabang-nama" name="cabang-nama" class="form-control" required />
+                        <label for="cabang-nama">Nama Cabang</label>
                     </div>
                 </div>
 
-                <!-- Cabang -->
+                <!-- Kode -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <select id="zisco-cabang" name="zisco-cabang" class="form-select" required>
-                            <option value="">-- Pilih Cabang --</option>
+                        <input type="text" id="cabang-kode" name="cabang-kode" class="form-control" />
+                        <label for="cabang-kode">Kode Cabang</label>
+                    </div>
+                </div>
+
+                <!-- Alamat -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" id="cabang-alamat" name="cabang-alamat" class="form-control" />
+                        <label for="cabang-alamat">Alamat</label>
+                    </div>
+                </div>
+
+                <!-- Telepon -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" id="cabang-telepon" name="cabang-telepon" class="form-control" />
+                        <label for="cabang-telepon">Telepon</label>
+                    </div>
+                </div>
+
+                <!-- Regional -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <select id="cabang-regional" name="cabang-regional" class="form-select" required>
+                            <option value="">-- Pilih Regional --</option>
                             <!-- Diisi via JS -->
                         </select>
-                        <label for="zisco-cabang">Cabang</label>
-                    </div>
-                </div>
-
-                <!-- Lokasi -->
-                <div class="col-sm-12">
-                    <div class="form-floating form-floating-outline">
-                        <input type="text" id="zisco-lokasi" name="zisco-lokasi" class="form-control" />
-                        <label for="zisco-lokasi">Lokasi</label>
-                    </div>
-                </div>
-
-                <!-- User -->
-                <div class="col-sm-12">
-                    <div class="form-floating form-floating-outline">
-                        <select id="zisco-user" name="zisco-user" class="form-select" required>
-                            <option value="">-- Pilih User --</option>
-                            <!-- Diisi via JS -->
-                        </select>
-                        <label for="zisco-user">User</label>
+                        <label for="cabang-regional">Regional</label>
                     </div>
                 </div>
 
@@ -82,5 +88,5 @@
 </div>
 
 <!-- JS -->
-<script src="{{ asset('js/laz/ziscos.js') }}"></script>
+<script src="{{ asset('js/laz/cabangs.js') }}"></script>
 @endsection

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- DataTable -->
@@ -9,7 +10,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nomor Transaksi</th>
-                        <th>Donatur</th>
+                        <th>Donasi</th>
                         <th>Total</th>
                         <th>Komisi Zisco</th>
                         <th>Bulan Donasi</th>
@@ -37,19 +38,11 @@
                 <!-- Donasi -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <select id="kwitansi-donasi-id" name="kwitansi-donasi-id" class="form-select" required>
+                        <select id="kwitansi-donasi" name="kwitansi-donasi" class="form-select" required>
                             <option value="">-- Pilih Donasi --</option>
                             <!-- Diisi via JS -->
                         </select>
-                        <label for="kwitansi-donasi-id">Donasi</label>
-                    </div>
-                </div>
-
-                <!-- Bulan Donasi -->
-                <div class="col-sm-12">
-                    <div class="form-floating form-floating-outline">
-                        <input type="month" id="kwitansi-bulan" name="kwitansi-bulan" class="form-control" required />
-                        <label for="kwitansi-bulan">Bulan Donasi</label>
+                        <label for="kwitansi-donasi">Donasi</label>
                     </div>
                 </div>
 
@@ -69,16 +62,24 @@
                     </div>
                 </div>
 
+                <!-- Bulan Donasi -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <input type="month" id="kwitansi-bulan" name="kwitansi-bulan" class="form-control" required />
+                        <label for="kwitansi-bulan">Bulan Donasi</label>
+                    </div>
+                </div>
+
                 <!-- Dicetak -->
                 <div class="col-sm-12">
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" id="kwitansi-dicetak" name="kwitansi-dicetak" />
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" id="kwitansi-dicetak" name="kwitansi-dicetak">
                         <label class="form-check-label" for="kwitansi-dicetak">Sudah Dicetak</label>
                     </div>
                 </div>
 
                 <!-- Tombol -->
-                <div class="col-sm-12">
+                <div class="col-sm-12 mt-3">
                     <button type="submit" class="btn btn-primary data-submit me-sm-4 me-1">Simpan</button>
                     <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Batal</button>
                 </div>

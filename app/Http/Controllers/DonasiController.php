@@ -9,47 +9,45 @@ class DonasiController extends Controller
 {
     public function index()
     {
-        $donasis = Donasi::with(['donatur', 'zisco', 'jenisDonasi'])->latest()->get();
-        return response()->json($donasis);
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'donatur_id' => 'required|exists:donaturs,id',
-            'zisco_id' => 'nullable|exists:ziscos,id',
-            'jenis_donasi_id' => 'required|exists:jenis_donasis,id',
-            'nominal' => 'required|numeric',
-            'bulan_donasi' => 'required|date',
-            'metode' => 'nullable|string|max:100',
-        ]);
-
-        $donasi = Donasi::create($validated);
-
-        return response()->json($donasi, 201);
+        return response()->json(Donasi::with(['donatur', 'jenisDonasi', 'zisco', 'kwitansi'])->get());
     }
 
     public function show($id)
     {
-        $donasi = Donasi::with(['donatur', 'zisco', 'jenisDonasi'])->findOrFail($id);
-        return response()->json($donasi);
+        return response()->json(Donasi::with(['donatur', 'jenisDonasi', 'zisco', 'kwitansi'])->findOrFail($id));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'donatur_id' => 'required|exists:donaturs,id',
+            'jenis_donasi_id' => 'required|exists:jenis_donasis,id',
+            'zisco_id' => 'nullable|exists:ziscos,id',
+            'nominal' => 'required|numeric|min:0',
+            'bulan_donasi' => 'required|date',
+            'metode' => 'nullable|string|max:100',
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        $donasi = Donasi::create($data);
+        return response()->json($donasi, 201);
     }
 
     public function update(Request $request, $id)
     {
         $donasi = Donasi::findOrFail($id);
 
-        $validated = $request->validate([
-            'donatur_id' => 'required|exists:donaturs,id',
+        $data = $request->validate([
+            'donatur_id' => 'sometimes|exists:donaturs,id',
+            'jenis_donasi_id' => 'sometimes|exists:jenis_donasis,id',
             'zisco_id' => 'nullable|exists:ziscos,id',
-            'jenis_donasi_id' => 'required|exists:jenis_donasis,id',
-            'nominal' => 'required|numeric',
-            'bulan_donasi' => 'required|date',
+            'nominal' => 'sometimes|numeric|min:0',
+            'bulan_donasi' => 'sometimes|date',
             'metode' => 'nullable|string|max:100',
+            'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        $donasi->update($validated);
-
+        $donasi->update($data);
         return response()->json($donasi);
     }
 

@@ -26,6 +26,8 @@ use App\Http\Controllers\InstansiController;
 use App\Http\Controllers\DonaturController;
 use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\KwitansiController;
+use App\Http\Controllers\RegionalController;
+use App\Http\Controllers\CabangController;
 use App\Models\Menu;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -228,11 +230,13 @@ Route::middleware('auth')->group(function () {
         return view('laz.jenis-donasis', ['title' => 'Jenis Donasi']);
     })->name('jenis-donasi');
     Route::apiResource('jenis-donasis', JenisDonasiController::class);
+    Route::post('/jenis-donasis/import', [JenisDonasiController::class, 'import']);
 
     Route::get('/instansi', function () {
         return view('laz.instansis', ['title' => 'Instansi']);
     })->name('instansi');
     Route::apiResource('instansis', InstansiController::class);
+    Route::post('/instansis/import', [InstansiController::class, 'import']);
 
 
     Route::get('/donatur', function () {
@@ -249,6 +253,20 @@ Route::middleware('auth')->group(function () {
         return view('laz.kwitansis', ['title' => 'Kwitansi']);
     })->name('kwitansi');
     Route::apiResource('kwitansis', KwitansiController::class);
+
+
+    Route::get('/regional', function () {
+        return view('laz.regional', ['title' => 'Regional']);
+    })->name('regional');
+    Route::apiResource('regionals', RegionalController::class);
+    Route::post('/regionals/import', [RegionalController::class, 'import']);
+
+
+    Route::get('/cabang', function () {
+        return view('laz.cabang', ['title' => 'Cabang']);
+    })->name('cabang');
+    Route::apiResource('cabangs', CabangController::class);
+    Route::post('/cabangs/import', [CabangController::class, 'import']);
 });
 
 

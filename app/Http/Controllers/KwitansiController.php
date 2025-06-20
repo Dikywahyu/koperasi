@@ -9,47 +9,41 @@ class KwitansiController extends Controller
 {
     public function index()
     {
-        $kwitansis = Kwitansi::with('donasi')->latest()->get();
-        return response()->json($kwitansis);
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'donasi_id' => 'required|exists:donasis,id',
-            'nomor_transaksi' => 'required|uuid|unique:kwitansis,nomor_transaksi',
-            'total' => 'required|numeric',
-            'komisi_zisco' => 'required|numeric',
-            'dicetak' => 'nullable|boolean',
-            'bulan_donasi' => 'required|date',
-        ]);
-
-        $kwitansi = Kwitansi::create($validated);
-
-        return response()->json($kwitansi, 201);
+        return response()->json(Kwitansi::with('donasi')->get());
     }
 
     public function show($id)
     {
-        $kwitansi = Kwitansi::with('donasi')->findOrFail($id);
-        return response()->json($kwitansi);
+        return response()->json(Kwitansi::with('donasi')->findOrFail($id));
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'donasi_id' => 'required|exists:donasis,id',
+            'total' => 'required|numeric|min:0',
+            'komisi_zisco' => 'required|numeric|min:0',
+            'dicetak' => 'boolean',
+            'bulan_donasi' => 'required|date',
+        ]);
+
+        $kwitansi = Kwitansi::create($data); // Nomor transaksi akan auto-generate di model
+        return response()->json($kwitansi, 201);
     }
 
     public function update(Request $request, $id)
     {
         $kwitansi = Kwitansi::findOrFail($id);
 
-        $validated = $request->validate([
-            'donasi_id' => 'required|exists:donasis,id',
-            'nomor_transaksi' => 'required|uuid|unique:kwitansis,nomor_transaksi,' . $id,
-            'total' => 'required|numeric',
-            'komisi_zisco' => 'required|numeric',
-            'dicetak' => 'nullable|boolean',
-            'bulan_donasi' => 'required|date',
+        $data = $request->validate([
+            'donasi_id' => 'sometimes|exists:donasis,id',
+            'total' => 'sometimes|numeric|min:0',
+            'komisi_zisco' => 'sometimes|numeric|min:0',
+            'dicetak' => 'boolean',
+            'bulan_donasi' => 'sometimes|date',
         ]);
 
-        $kwitansi->update($validated);
-
+        $kwitansi->update($data);
         return response()->json($kwitansi);
     }
 

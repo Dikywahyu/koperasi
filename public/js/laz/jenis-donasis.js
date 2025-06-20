@@ -15,13 +15,9 @@ $(function () {
                 title: "No",
                 render: (data, type, row, meta) => meta.row + 1,
             },
-            { data: "nama", title: "Nama Jenis Donasi" },
-            { data: "jenis", title: "Kategori" },
-            {
-                data: "deskripsi",
-                title: "Deskripsi",
-                render: (data) => data || "-",
-            },
+            { data: "nama", title: "Nama" },
+            { data: "jenis", title: "Jenis" },
+            { data: "deskripsi", title: "Deskripsi", defaultContent: "-" },
             {
                 data: "id",
                 title: "Aksi",
@@ -42,7 +38,7 @@ $(function () {
                 className: "btn btn-primary",
                 action: function () {
                     $("#form-jenis-donasi")[0].reset();
-                    $("#jenis-donasi-id").val("");
+                    $("#jenis-id").val("");
                     offCanvas.show();
                 },
             },
@@ -54,10 +50,10 @@ $(function () {
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
         $.get(`/jenis-donasis/${id}`, function (data) {
-            $("#jenis-donasi-id").val(data.id);
-            $("#jenis-donasi-nama").val(data.nama);
-            $("#jenis-donasi-jenis").val(data.jenis);
-            $("#jenis-donasi-deskripsi").val(data.deskripsi);
+            $("#jenis-id").val(data.id);
+            $("#jenis-nama").val(data.nama);
+            $("#jenis-tipe").val(data.jenis);
+            $("#jenis-deskripsi").val(data.deskripsi);
             offCanvas.show();
         });
     });
@@ -99,7 +95,7 @@ $(function () {
 
     $("#form-jenis-donasi").on("submit", function (e) {
         e.preventDefault();
-        const id = $("#jenis-donasi-id").val();
+        const id = $("#jenis-id").val();
         const method = id ? "PUT" : "POST";
         const url = id ? `/jenis-donasis/${id}` : `/jenis-donasis`;
 
@@ -107,9 +103,9 @@ $(function () {
             url: url,
             method: method,
             data: {
-                nama: $("#jenis-donasi-nama").val(),
-                jenis: $("#jenis-donasi-jenis").val(),
-                deskripsi: $("#jenis-donasi-deskripsi").val(),
+                nama: $("#jenis-nama").val(),
+                jenis: $("#jenis-tipe").val(),
+                deskripsi: $("#jenis-deskripsi").val(),
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function () {
@@ -122,7 +118,7 @@ $(function () {
                     showConfirmButton: false,
                 });
                 $("#form-jenis-donasi")[0].reset();
-                $("#jenis-donasi-id").val("");
+                $("#jenis-id").val("");
                 offCanvas.hide();
             },
             error: function (xhr) {

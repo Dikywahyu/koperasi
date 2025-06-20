@@ -9,7 +9,7 @@ class ZiscoController extends Controller
 {
     public function index()
     {
-        $ziscos = Zisco::with('user')->latest()->get();
+        $ziscos = Zisco::with(['user', 'cabang'])->latest()->get();
         return response()->json($ziscos);
     }
 
@@ -17,6 +17,7 @@ class ZiscoController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
+            'cabang_id' => 'nullable|exists:cabangs,id',
             'nama' => 'required|string|max:255',
             'lokasi' => 'nullable|string|max:255',
         ]);
@@ -39,6 +40,7 @@ class ZiscoController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'nama' => 'required|string|max:255',
+            'cabang_id' => 'nullable|exists:cabangs,id',
             'lokasi' => 'nullable|string|max:255',
         ]);
 

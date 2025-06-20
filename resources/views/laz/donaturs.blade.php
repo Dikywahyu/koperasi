@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- DataTable -->
@@ -10,14 +11,16 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Kode Donatur</th>
-                        <th>Instansi</th>
-                        <th>Kontak</th>
                         <th>Alamat</th>
+                        <th>Kontak</th>
+                        <th>Instansi</th>
+                        <th>Zisco</th>
+                        <th>User</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Data via AJAX -->
+                    <!-- Data AJAX -->
                 </tbody>
             </table>
         </div>
@@ -44,8 +47,24 @@
                 <!-- Kode Donatur -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" id="donatur-kode" name="donatur-kode" class="form-control" required />
+                        <input type="text" id="donatur-kode" name="donatur-kode" class="form-control" />
                         <label for="donatur-kode">Kode Donatur</label>
+                    </div>
+                </div>
+
+                <!-- Alamat -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" id="donatur-alamat" name="donatur-alamat" class="form-control" />
+                        <label for="donatur-alamat">Alamat</label>
+                    </div>
+                </div>
+
+                <!-- Kontak -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <input type="text" id="donatur-kontak" name="donatur-kontak" class="form-control" />
+                        <label for="donatur-kontak">Kontak</label>
                     </div>
                 </div>
 
@@ -60,19 +79,25 @@
                     </div>
                 </div>
 
-                <!-- Kontak -->
+                <!-- Zisco -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <input type="text" id="donatur-kontak" name="donatur-kontak" class="form-control" />
-                        <label for="donatur-kontak">Kontak</label>
+                        <select id="donatur-zisco" name="donatur-zisco" class="form-select">
+                            <option value="">-- Pilih Zisco --</option>
+                            <!-- Diisi via JS -->
+                        </select>
+                        <label for="donatur-zisco">Zisco</label>
                     </div>
                 </div>
 
-                <!-- Alamat -->
+                <!-- User -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <textarea id="donatur-alamat" name="donatur-alamat" class="form-control" rows="3"></textarea>
-                        <label for="donatur-alamat">Alamat</label>
+                        <select id="donatur-user" name="donatur-user" class="form-select" required>
+                            <option value="">-- Pilih User --</option>
+                            <!-- Diisi via JS -->
+                        </select>
+                        <label for="donatur-user">User</label>
                     </div>
                 </div>
 
@@ -86,6 +111,6 @@
     </div>
 </div>
 
-<!-- Script khusus Donatur -->
+<!-- JS -->
 <script src="{{ asset('js/laz/donaturs.js') }}"></script>
 @endsection

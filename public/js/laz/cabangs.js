@@ -6,7 +6,7 @@ $(function () {
 
     table.DataTable({
         ajax: {
-            url: "/kwitansis",
+            url: "/cabangs",
             dataSrc: "",
         },
         columns: [
@@ -15,15 +15,14 @@ $(function () {
                 title: "No",
                 render: (data, type, row, meta) => meta.row + 1,
             },
-            { data: "nomor_transaksi", title: "Nomor Transaksi" },
-            { data: "donasi.donatur.nama", title: "Donasi", defaultContent: "-" },
-            { data: "total", title: "Total", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
-            { data: "komisi_zisco", title: "Komisi Zisco", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
-            { data: "bulan_donasi", title: "Bulan Donasi" },
+            { data: "nama", title: "Nama" },
+            { data: "kode", title: "Kode" },
+            { data: "alamat", title: "Alamat" },
+            { data: "telepon", title: "Telepon" },
             {
-                data: "dicetak",
-                title: "Status Cetak",
-                render: d => d ? "Sudah" : "Belum",
+                data: "regional.nama",
+                title: "Regional",
+                defaultContent: "-",
             },
             {
                 data: "id",
@@ -41,13 +40,12 @@ $(function () {
             '<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
             {
-                text: '<i class="ri-add-line"></i> Tambah Kwitansi',
+                text: '<i class="ri-add-line"></i> Tambah Cabang',
                 className: "btn btn-primary",
                 action: function () {
-                    $("#form-kwitansi")[0].reset();
-                    $("#kwitansi-id").val("");
-                    $("#kwitansi-dicetak").prop("checked", false);
-                    loadDonasi();
+                    $("#form-cabang")[0].reset();
+                    $("#cabang-id").val("");
+                    loadRegionals();
                     offCanvas.show();
                 },
             },
@@ -56,30 +54,33 @@ $(function () {
         pageLength: 10,
     });
 
-    function loadDonasi() {
-        $.get("/donasis", function (data) {
-            const select = $("#kwitansi-donasi");
-            select.empty().append(`<option value="">-- Pilih Donasi --</option>`);
-            data.forEach((d) => {
-                select.append(`<option value="${d.id}">${d.donatur?.nama ?? '-'} - Rp ${parseFloat(d.nominal).toLocaleString()}</option>`);
+    const loadRegionals = () => {
+        return $.get("/regionals", function (data) {
+            const select = $("#cabang-regional");
+            select.empty().append(`<option value="">-- Pilih Regional --</option>`);
+            data.forEach(r => {
+                select.append(`<option value="${r.id}">${r.nama}</option>`);
             });
         });
-    }
+    };
 
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
-        $.get(`/kwitansis/${id}`, function (data) {
-            $("#kwitansi-id").val(data.id);
-            $("#kwitansi-total").val(data.total);
-            $("#kwitansi-komisi").val(data.komisi_zisco);
-            $("#kwitansi-bulan").val(data.bulan_donasi);
-            $("#kwitansi-dicetak").prop("checked", data.dicetak);
-            loadDonasi();
-            setTimeout(() => {
-                $("#kwitansi-donasi").val(data.donasi_id);
-            }, 100);
-            offCanvas.show();
-        });
+
+        // Tunggu sampai data regional selesai dimuat, baru get detail cabang
+        loadRegionals()
+            .then(() => {
+                return $.get(`/cabangs/${id}`);
+            })
+            .then((data) => {
+                $("#cabang-id").val(data.id);
+                $("#cabang-nama").val(data.nama);
+                $("#cabang-kode").val(data.kode);
+                $("#cabang-alamat").val(data.alamat);
+                $("#cabang-telepon").val(data.telepon);
+                $("#cabang-regional").val(data.regional_id);
+                offCanvas.show();
+            });
     });
 
     $(document).on("click", ".btn-delete", function () {
@@ -97,7 +98,7 @@ $(function () {
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: `/kwitansis/${id}`,
+                    url: `/cabangs/${id}`,
                     method: "DELETE",
                     data: {
                         _token: $('meta[name="csrf-token"]').attr("content"),
@@ -117,21 +118,21 @@ $(function () {
         });
     });
 
-    $("#form-kwitansi").on("submit", function (e) {
+    $("#form-cabang").on("submit", function (e) {
         e.preventDefault();
-        const id = $("#kwitansi-id").val();
+        const id = $("#cabang-id").val();
         const method = id ? "PUT" : "POST";
-        const url = id ? `/kwitansis/${id}` : `/kwitansis`;
+        const url = id ? `/cabangs/${id}` : `/cabangs`;
 
         $.ajax({
             url: url,
             method: method,
             data: {
-                donasi_id: $("#kwitansi-donasi").val(),
-                total: $("#kwitansi-total").val(),
-                komisi_zisco: $("#kwitansi-komisi").val(),
-                bulan_donasi: $("#kwitansi-bulan").val(),
-                dicetak: $("#kwitansi-dicetak").is(":checked"),
+                nama: $("#cabang-nama").val(),
+                kode: $("#cabang-kode").val(),
+                alamat: $("#cabang-alamat").val(),
+                telepon: $("#cabang-telepon").val(),
+                regional_id: $("#cabang-regional").val(),
                 _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function () {
@@ -143,8 +144,8 @@ $(function () {
                     timer: 2000,
                     showConfirmButton: false,
                 });
-                $("#form-kwitansi")[0].reset();
-                $("#kwitansi-id").val("");
+                $("#form-cabang")[0].reset();
+                $("#cabang-id").val("");
                 offCanvas.hide();
             },
             error: function (xhr) {

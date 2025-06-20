@@ -15,6 +15,10 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\TipeDokumenController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\PemasokController;
+use App\Http\Controllers\AnggotaProfileController;
+use App\Http\Controllers\SimpananController;
+use App\Http\Controllers\PinjamanController;
+use App\Http\Controllers\AngsuranController;
 use App\Models\Menu;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -173,6 +177,34 @@ Route::middleware('auth')->group(function () {
     Route::get('/dataassets/{id}', [AssetController::class, 'show']);
     Route::put('/dataassets/{id}', [AssetController::class, 'update']);
     Route::delete('/dataassets/{id}', [AssetController::class, 'destroy']);
+
+    // anggotaprofiles
+    Route::get('/anggotaprofiles', [AnggotaProfileController::class, 'index']);
+    Route::get('/anggotaprofiles/{id}', [AnggotaProfileController::class, 'show']);
+    Route::post('/anggotaprofiles', [AnggotaProfileController::class, 'store']);
+    Route::put('/anggotaprofiles/{id}', [AnggotaProfileController::class, 'update']);
+    Route::delete('/anggotaprofiles/{id}', [AnggotaProfileController::class, 'destroy']);
+
+    // simpanans
+    Route::get('/simpanans', [SimpananController::class, 'index']);
+    Route::get('/simpanans/{id}', [SimpananController::class, 'show']);
+    Route::post('/simpanans', [SimpananController::class, 'store']);
+    Route::put('/simpanans/{id}', [SimpananController::class, 'update']);
+    Route::delete('/simpanans/{id}', [SimpananController::class, 'destroy']);
+
+    // pinjamans
+    Route::get('/pinjamans', [PinjamanController::class, 'index']);
+    Route::get('/pinjamans/{id}', [PinjamanController::class, 'show']);
+    Route::post('/pinjamans', [PinjamanController::class, 'store']);
+    Route::put('/pinjamans/{id}', [PinjamanController::class, 'update']);
+    Route::delete('/pinjamans/{id}', [PinjamanController::class, 'destroy']);
+
+    //angsurans
+    Route::get('/angsurans', [AngsuranController::class, 'index']);
+    Route::get('/angsurans/{id}', [AngsuranController::class, 'show']);
+    Route::post('/angsurans', [AngsuranController::class, 'store']);
+    Route::put('/angsurans/{id}', [AngsuranController::class, 'update']);
+    Route::delete('/angsurans/{id}', [AngsuranController::class, 'destroy']);
 });
 
 

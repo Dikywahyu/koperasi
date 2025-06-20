@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserCredential::class);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(AnggotaProfile::class);
+    }
 }

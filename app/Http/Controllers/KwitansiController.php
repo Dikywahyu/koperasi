@@ -7,59 +7,57 @@ use Illuminate\Http\Request;
 
 class KwitansiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $kwitansis = Kwitansi::with('donasi')->latest()->get();
+        return response()->json($kwitansis);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'donasi_id' => 'required|exists:donasis,id',
+            'nomor_transaksi' => 'required|uuid|unique:kwitansis,nomor_transaksi',
+            'total' => 'required|numeric',
+            'komisi_zisco' => 'required|numeric',
+            'dicetak' => 'nullable|boolean',
+            'bulan_donasi' => 'required|date',
+        ]);
+
+        $kwitansi = Kwitansi::create($validated);
+
+        return response()->json($kwitansi, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Kwitansi $kwitansi)
+    public function show($id)
     {
-        //
+        $kwitansi = Kwitansi::with('donasi')->findOrFail($id);
+        return response()->json($kwitansi);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Kwitansi $kwitansi)
+    public function update(Request $request, $id)
     {
-        //
+        $kwitansi = Kwitansi::findOrFail($id);
+
+        $validated = $request->validate([
+            'donasi_id' => 'required|exists:donasis,id',
+            'nomor_transaksi' => 'required|uuid|unique:kwitansis,nomor_transaksi,' . $id,
+            'total' => 'required|numeric',
+            'komisi_zisco' => 'required|numeric',
+            'dicetak' => 'nullable|boolean',
+            'bulan_donasi' => 'required|date',
+        ]);
+
+        $kwitansi->update($validated);
+
+        return response()->json($kwitansi);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Kwitansi $kwitansi)
+    public function destroy($id)
     {
-        //
-    }
+        $kwitansi = Kwitansi::findOrFail($id);
+        $kwitansi->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Kwitansi $kwitansi)
-    {
-        //
+        return response()->json(['message' => 'Kwitansi deleted']);
     }
 }

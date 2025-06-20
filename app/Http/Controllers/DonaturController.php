@@ -7,59 +7,57 @@ use Illuminate\Http\Request;
 
 class DonaturController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $donaturs = Donatur::with(['user', 'instansi'])->latest()->get();
+        return response()->json($donaturs);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'instansi_id' => 'nullable|exists:instansis,id',
+            'nama' => 'required|string|max:255',
+            'kode_donatur' => 'required|string|max:100|unique:donaturs,kode_donatur',
+            'alamat' => 'nullable|string|max:255',
+            'kontak' => 'nullable|string|max:100',
+        ]);
+
+        $donatur = Donatur::create($validated);
+
+        return response()->json($donatur, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Donatur $donatur)
+    public function show($id)
     {
-        //
+        $donatur = Donatur::with(['user', 'instansi'])->findOrFail($id);
+        return response()->json($donatur);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Donatur $donatur)
+    public function update(Request $request, $id)
     {
-        //
+        $donatur = Donatur::findOrFail($id);
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'instansi_id' => 'nullable|exists:instansis,id',
+            'nama' => 'required|string|max:255',
+            'kode_donatur' => 'required|string|max:100|unique:donaturs,kode_donatur,' . $id,
+            'alamat' => 'nullable|string|max:255',
+            'kontak' => 'nullable|string|max:100',
+        ]);
+
+        $donatur->update($validated);
+
+        return response()->json($donatur);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Donatur $donatur)
+    public function destroy($id)
     {
-        //
-    }
+        $donatur = Donatur::findOrFail($id);
+        $donatur->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Donatur $donatur)
-    {
-        //
+        return response()->json(['message' => 'Donatur deleted']);
     }
 }

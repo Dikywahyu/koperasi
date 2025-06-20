@@ -7,59 +7,53 @@ use Illuminate\Http\Request;
 
 class InstansiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $instansis = Instansi::with('penanggungJawab')->latest()->get();
+        return response()->json($instansis);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'telepon' => 'nullable|string|max:50',
+            'penanggung_jawab_id' => 'nullable|exists:donaturs,id',
+        ]);
+
+        $instansi = Instansi::create($validated);
+
+        return response()->json($instansi, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Instansi $instansi)
+    public function show($id)
     {
-        //
+        $instansi = Instansi::with('penanggungJawab')->findOrFail($id);
+        return response()->json($instansi);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Instansi $instansi)
+    public function update(Request $request, $id)
     {
-        //
+        $instansi = Instansi::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'nullable|string|max:255',
+            'telepon' => 'nullable|string|max:50',
+            'penanggung_jawab_id' => 'nullable|exists:donaturs,id',
+        ]);
+
+        $instansi->update($validated);
+
+        return response()->json($instansi);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Instansi $instansi)
+    public function destroy($id)
     {
-        //
-    }
+        $instansi = Instansi::findOrFail($id);
+        $instansi->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Instansi $instansi)
-    {
-        //
+        return response()->json(['message' => 'Instansi deleted']);
     }
 }

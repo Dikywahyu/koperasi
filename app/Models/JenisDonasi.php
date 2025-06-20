@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class JenisDonasi extends Model
 {
     use HasFactory;
+    protected $fillable = ['nama', 'jenis', 'deskripsi'];
+
+    public function donasis()
+    {
+        return $this->hasMany(Donasi::class);
+    }
 }

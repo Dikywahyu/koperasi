@@ -7,59 +7,51 @@ use Illuminate\Http\Request;
 
 class ZiscoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $ziscos = Zisco::with('user')->latest()->get();
+        return response()->json($ziscos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'nama' => 'required|string|max:255',
+            'lokasi' => 'nullable|string|max:255',
+        ]);
+
+        $zisco = Zisco::create($validated);
+
+        return response()->json($zisco, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Zisco $zisco)
+    public function show($id)
     {
-        //
+        $zisco = Zisco::with('user')->findOrFail($id);
+        return response()->json($zisco);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Zisco $zisco)
+    public function update(Request $request, $id)
     {
-        //
+        $zisco = Zisco::findOrFail($id);
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'nama' => 'required|string|max:255',
+            'lokasi' => 'nullable|string|max:255',
+        ]);
+
+        $zisco->update($validated);
+
+        return response()->json($zisco);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Zisco $zisco)
+    public function destroy($id)
     {
-        //
-    }
+        $zisco = Zisco::findOrFail($id);
+        $zisco->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Zisco $zisco)
-    {
-        //
+        return response()->json(['message' => 'Zisco deleted']);
     }
 }

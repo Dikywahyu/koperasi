@@ -8,60 +8,61 @@ use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
-    //
     public function index()
     {
-        $transaksis = Transaksi::with('user')->latest()->get();
+        $transaksis = Transaksi::with('transaksible')->latest()->get();
         return response()->json($transaksis);
-    }
-
-    public function show($id)
-    {
-        $data = Transaksi::with('user')->findOrFail($id);
-        return response()->json($data);
     }
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id'      => 'required|exists:users,id',
-            'tanggal'      => 'required|date',
-            'jenis'        => 'required|in:masuk,keluar',
-            'kategori'     => 'required|string|max:100',
-            'jumlah'       => 'required|numeric|min:0',
-            'keterangan'   => 'nullable|string',
+        $validated = $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'tanggal' => 'required|date',
+            'tipe' => 'required|in:simpanan,pinjaman,angsuran,lainnya',
+            'jenis' => 'required|in:masuk,keluar',
+            'jumlah' => 'required|numeric',
+            'keterangan' => 'nullable|string',
+            'transaksible_type' => 'nullable|string',
+            'transaksible_id' => 'nullable|integer',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        $transaksi = Transaksi::create($validated);
 
-        Transaksi::create($request->all());
-        return response()->json(['success' => 'Data transaksi berhasil disimpan']);
+        return response()->json($transaksi, 201);
+    }
+
+    public function show($id)
+    {
+        $transaksi = Transaksi::with('transaksible')->findOrFail($id);
+        return response()->json($transaksi);
     }
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id'      => 'required|exists:users,id',
-            'tanggal'      => 'required|date',
-            'jenis'        => 'required|in:masuk,keluar',
-            'kategori'     => 'required|string|max:100',
-            'jumlah'       => 'required|numeric|min:0',
-            'keterangan'   => 'nullable|string',
+        $transaksi = Transaksi::findOrFail($id);
+
+        $validated = $request->validate([
+            'user_id' => 'nullable|exists:users,id',
+            'tanggal' => 'required|date',
+            'tipe' => 'required|in:simpanan,pinjaman,angsuran,lainnya',
+            'jenis' => 'required|in:masuk,keluar',
+            'jumlah' => 'required|numeric',
+            'keterangan' => 'nullable|string',
+            'transaksible_type' => 'nullable|string',
+            'transaksible_id' => 'nullable|integer',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
+        $transaksi->update($validated);
 
-        Transaksi::findOrFail($id)->update($request->all());
-        return response()->json(['success' => 'Data transaksi berhasil diperbarui']);
+        return response()->json($transaksi);
     }
 
     public function destroy($id)
     {
-        Transaksi::findOrFail($id)->delete();
-        return response()->json(['success' => 'Data transaksi berhasil dihapus']);
+        $transaksi = Transaksi::findOrFail($id);
+        $transaksi->delete();
+
+        return response()->json(['message' => 'Transaksi deleted']);
     }
 }

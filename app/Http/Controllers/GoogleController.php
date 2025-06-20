@@ -54,6 +54,10 @@ class GoogleController extends Controller
             $location = null; // jika gagal ambil lokasi
         }
 
+
+
+        Auth::login($user);
+
         // Simpan log login
         LoginLog::create([
             'user_id' => Auth::id(),
@@ -62,8 +66,6 @@ class GoogleController extends Controller
             'location' => $location,
             'user_agent' => $request->userAgent(),
         ]);
-
-        Auth::login($user);
 
         return redirect('/dashboard');
     }

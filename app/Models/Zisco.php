@@ -9,7 +9,12 @@ class Zisco extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'lokasi'];
+    protected $fillable = ['user_id', 'nama', 'lokasi'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function donasis()
     {

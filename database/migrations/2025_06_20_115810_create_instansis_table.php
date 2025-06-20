@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nama');
             $table->string('alamat')->nullable();
             $table->string('telepon')->nullable();
-            // $table->foreignId('penanggung_jawab_id')->nullable()->constrained('donaturs')->onDelete('set null');
             $table->timestamps();
         });
     }

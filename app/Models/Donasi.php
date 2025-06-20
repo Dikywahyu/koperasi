@@ -8,11 +8,32 @@ use Illuminate\Database\Eloquent\Model;
 class Donasi extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'donatur_id',
+        'zisco_id',
+        'jenis_donasi_id',
+        'nominal',
+        'bulan_donasi',
+        'metode',
+    ];
 
-    protected $fillable = ['nama', 'kode_donatur', 'alamat', 'kontak'];
-
-    public function donasis()
+    public function donatur()
     {
-        return $this->hasMany(Donasi::class);
+        return $this->belongsTo(Donatur::class);
+    }
+
+    public function zisco()
+    {
+        return $this->belongsTo(Zisco::class);
+    }
+
+    public function jenisDonasi()
+    {
+        return $this->belongsTo(JenisDonasi::class);
+    }
+
+    public function kwitansi()
+    {
+        return $this->hasOne(Kwitansi::class);
     }
 }

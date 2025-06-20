@@ -19,6 +19,13 @@ use App\Http\Controllers\AnggotaProfileController;
 use App\Http\Controllers\SimpananController;
 use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\AngsuranController;
+use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\ZiscoController;
+use App\Http\Controllers\JenisDonasiController;
+use App\Http\Controllers\InstansiController;
+use App\Http\Controllers\DonaturController;
+use App\Http\Controllers\DonasiController;
+use App\Http\Controllers\KwitansiController;
 use App\Models\Menu;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -205,6 +212,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/angsurans', [AngsuranController::class, 'store']);
     Route::put('/angsurans/{id}', [AngsuranController::class, 'update']);
     Route::delete('/angsurans/{id}', [AngsuranController::class, 'destroy']);
+
+    Route::apiResource('transaksis', TransaksiController::class);
+    Route::apiResource('ziscos', ZiscoController::class);
+    Route::apiResource('jenis-donasis', JenisDonasiController::class);
+    Route::apiResource('instansis', InstansiController::class);
+    Route::apiResource('donaturs', DonaturController::class);
+    Route::apiResource('donasis', DonasiController::class);
+    Route::apiResource('kwitansis', KwitansiController::class);
 });
 
 

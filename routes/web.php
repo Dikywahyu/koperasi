@@ -213,12 +213,41 @@ Route::middleware('auth')->group(function () {
     Route::put('/angsurans/{id}', [AngsuranController::class, 'update']);
     Route::delete('/angsurans/{id}', [AngsuranController::class, 'destroy']);
 
+
+    Route::get('/transaksi', function () {
+        return view('laz.transaksis', ['title' => 'Transaksi']);
+    })->name('transaksi');
     Route::apiResource('transaksis', TransaksiController::class);
+
+    Route::get('/zisco', function () {
+        return view('laz.ziscos', ['title' => 'Zisco']);
+    })->name('zisco');
     Route::apiResource('ziscos', ZiscoController::class);
+
+    Route::get('/jenis-donasi', function () {
+        return view('laz.jenis-donasis', ['title' => 'Jenis Donasi']);
+    })->name('jenis-donasi');
     Route::apiResource('jenis-donasis', JenisDonasiController::class);
+
+    Route::get('/instansi', function () {
+        return view('laz.instansis', ['title' => 'Instansi']);
+    })->name('instansi');
     Route::apiResource('instansis', InstansiController::class);
+
+
+    Route::get('/donatur', function () {
+        return view('laz.donaturs', ['title' => 'Donatur']);
+    })->name('donatur');
     Route::apiResource('donaturs', DonaturController::class);
+
+    Route::get('/donasi', function () {
+        return view('laz.donasis', ['title' => 'Donasi']);
+    })->name('donasi');
     Route::apiResource('donasis', DonasiController::class);
+
+    Route::get('/kwitansi', function () {
+        return view('laz.kwitansis', ['title' => 'Kwitansi']);
+    })->name('kwitansi');
     Route::apiResource('kwitansis', KwitansiController::class);
 });
 

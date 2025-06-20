@@ -28,21 +28,21 @@ class MenuMaster extends Seeder
 
         // Submenu langsung di bawah Master
         $subs = [
-            ['Perusahaan', 'ri-community-line'],
-            ['Jenis Usaha', 'ri-shopping-bag-line'],
-            ['Anggota', 'ri-id-card-line'],
-            ['Tipe Dokumen', 'ri-layout-top-2-line'],
-            ['Pelanggan', 'ri-vip-crown-line'],
-            ['Pemasok', 'ri-shopping-basket-line'],
-            ['Assets', 'ri-roadster-line'],
+            ['perusahaan', 'Perusahaan', 'ri-community-line'],
+            ['jenis-usaha', 'Jenis Usaha', 'ri-shopping-bag-line'],
+            ['tipe-dokumen', 'Anggota', 'ri-id-card-line'],
+            ['pelanggan', 'Tipe Dokumen', 'ri-layout-top-2-line'],
+            ['pemasok', 'Pelanggan', 'ri-vip-crown-line'],
+            ['dataasset', 'Pemasok', 'ri-shopping-basket-line'],
+            ['anggotaprofiles', 'Assets', 'ri-roadster-line'],
         ];
 
-        foreach ($subs as [$title, $icon]) {
+        foreach ($subs as [$route, $title, $icon]) {
             Menu::create([
                 'id' => $id++,
                 'title' => $title,
                 'icon' => $icon,
-                'route' => 'layouts-container.html',
+                'route' => $route,
                 'parent_id' => $master->id,
                 'order' => $id,
                 'permission_id' => 1,
@@ -65,7 +65,7 @@ class MenuMaster extends Seeder
                 'id' => $id++,
                 'title' => $title,
                 'icon' => 'ri-circle-fill',
-                'route' => 'app-access-' . strtolower($title) . '.html',
+                'route' =>   strtolower($title),
                 'parent_id' => $sp->id,
                 'order' => $id,
                 'permission_id' => 1,

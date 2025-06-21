@@ -28,8 +28,8 @@ $(function () {
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
@@ -56,13 +56,16 @@ $(function () {
     const loadDonaturs = () => {
         return $.get("/donaturs", function (data) {
             const select = $("#instansi-penanggung-jawab");
-            select.empty().append(`<option value="">-- Pilih Penanggung Jawab --</option>`);
-            data.forEach(d => {
+            select
+                .empty()
+                .append(
+                    `<option value="">-- Pilih Penanggung Jawab --</option>`
+                );
+            data.forEach((d) => {
                 select.append(`<option value="${d.id}">${d.nama}</option>`);
             });
         });
     };
-
 
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");

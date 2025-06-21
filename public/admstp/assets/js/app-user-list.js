@@ -189,7 +189,7 @@ $(function () {
               '<a href="' +
               userView +
               '" class="dropdown-item"><i class="ri-eye-line me-2"></i><span>View</span></a>' +
-              '<a href="javascript:;" class="dropdown-item"><i class="ri-edit-box-line me-2"></i><span>Edit</span></a>' +
+              '<a href="javascript:;" class="dropdown-item"><i class="ri-edit-box-line me-2"></i><span><i class="ri-edit-box-line"></i></span></a>' +
               '<a href="javascript:;" class="dropdown-item delete-record"><i class="ri-delete-bin-7-line me-2"></i><span>Delete</span></a>' +
               '</div>' +
               '</div>'

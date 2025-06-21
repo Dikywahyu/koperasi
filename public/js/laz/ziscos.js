@@ -32,8 +32,8 @@ $(function () {
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
@@ -43,7 +43,7 @@ $(function () {
             '<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
             {
-                text: '<i class="ri-add-line"></i> Tambah Zisco',
+                text: '<i class="ri-add-line"></i>',
                 className: "btn btn-primary",
                 action: function () {
                     $("#form-zisco")[0].reset();
@@ -51,6 +51,19 @@ $(function () {
                     loadUsers();
                     loadCabangs();
                     offCanvas.show();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-refresh-line me-1"></i>',
+                className: "btn btn-outline-secondary",
+                action: function () {
+                    table.DataTable().ajax.reload();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
                 },
             },
         ],
@@ -62,7 +75,7 @@ $(function () {
         return $.get("/users", function (data) {
             const select = $("#zisco-user");
             select.empty().append(`<option value="">-- Pilih User --</option>`);
-            data.forEach(u => {
+            data.forEach((u) => {
                 select.append(`<option value="${u.id}">${u.name}</option>`);
             });
         });
@@ -71,8 +84,14 @@ $(function () {
     const loadCabangs = () => {
         return $.get("/cabangs", function (data) {
             const select = $("#zisco-cabang");
-            select.empty().append(`<option value="">-- Pilih Cabang --</option>`);
-            data.forEach(c => {
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Cabang --</option>`);
+
+            // Urutkan berdasarkan nama
+            data.sort((a, b) => a.nama.localeCompare(b.nama));
+
+            data.forEach((c) => {
                 select.append(`<option value="${c.id}">${c.nama}</option>`);
             });
         });
@@ -93,7 +112,6 @@ $(function () {
                 offCanvas.show();
             });
     });
-
 
     $(document).on("click", ".btn-delete", function () {
         const id = $(this).data("id");

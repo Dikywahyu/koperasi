@@ -85,6 +85,35 @@
             </form>
         </div>
     </div>
+
+    <!-- Offcanvas: Import Cabang via Excel -->
+    <div class="offcanvas offcanvas-end" id="import-record">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title">Import Excel Cabang</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body flex-grow-1">
+            <form class="pt-0 row g-3" id="form-import-cabang" enctype="multipart/form-data" method="POST" action="/cabangs/import">
+                @csrf
+
+                <!-- File Upload -->
+                <div class="col-sm-12">
+                    <div class="form-floating form-floating-outline">
+                        <input type="file" id="file-import-cabang" name="file" class="form-control" accept=".xlsx,.xls" required />
+                        <label for="file-import-cabang">File Excel</label>
+                    </div>
+                    <div class="form-text mt-1">Hanya file Excel (.xlsx, .xls) yang didukung.</div>
+                </div>
+
+                <!-- Tombol -->
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary data-submit me-sm-4 me-1">Import</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <!-- JS -->

@@ -462,7 +462,7 @@ $(function () {
               '<a href="javascript:;" class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect dropdown-toggle hide-arrow p-0" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-20px"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end">' +
               '<a href="javascript:;" class="dropdown-item">Download</a>' +
-              '<a href="javascript:;" class="dropdown-item">Edit</a>' +
+              '<a href="javascript:;" class="dropdown-item"><i class="ri-edit-box-line"></i></a>' +
               '<a href="javascript:;" class="dropdown-item">Duplicate</a>' +
               '<div class="dropdown-divider"></div>' +
               '<a href="javascript:;" class="dropdown-item delete-record text-danger">Delete</a>' +

@@ -4,32 +4,44 @@ $(function () {
     const offCanvas = new bootstrap.Offcanvas(offCanvasElement);
     if (!table.length) return;
 
-    // ===== Load dropdowns
+    // ===== Load dropdowns (dengan sorting)
+
+    // Jenis Donasi
     const loadJenisDonasis = () => {
         return $.get("/jenis-donasis", function (data) {
             const select = $("#donasi-jenis");
-            select.empty().append(`<option value="">-- Pilih Jenis Donasi --</option>`);
-            data.forEach(j => {
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Jenis Donasi --</option>`);
+            data.sort((a, b) => a.nama.localeCompare(b.nama)).forEach((j) => {
                 select.append(`<option value="${j.id}">${j.nama}</option>`);
             });
         });
     };
 
+    // Zisco
     const loadZiscos = () => {
         return $.get("/ziscos", function (data) {
             const select = $("#donasi-zisco");
-            select.empty().append(`<option value="">-- Pilih Zisco (Opsional) --</option>`);
-            data.forEach(z => {
+            select
+                .empty()
+                .append(
+                    `<option value="">-- Pilih Zisco (Opsional) --</option>`
+                );
+            data.sort((a, b) => a.nama.localeCompare(b.nama)).forEach((z) => {
                 select.append(`<option value="${z.id}">${z.nama}</option>`);
             });
         });
     };
 
+    // Donatur
     const loadDonatursForDonasi = () => {
         return $.get("/donaturs", function (data) {
             const select = $("#donasi-donatur");
-            select.empty().append(`<option value="">-- Pilih Donatur --</option>`);
-            data.forEach(d => {
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Donatur --</option>`);
+            data.sort((a, b) => a.nama.localeCompare(b.nama)).forEach((d) => {
                 select.append(`<option value="${d.id}">${d.nama}</option>`);
             });
         });
@@ -50,18 +62,26 @@ $(function () {
             { data: "donatur.nama", title: "Donatur", defaultContent: "-" },
             { data: "zisco.nama", title: "Zisco", defaultContent: "-" },
             { data: "jenis_donasi.nama", title: "Jenis ", defaultContent: "-" },
-            { data: "nominal", title: "Nominal", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
+            {
+                data: "nominal",
+                title: "Nominal",
+                render: (d) => `Rp ${parseFloat(d).toLocaleString()}`,
+            },
             { data: "bulan_donasi", title: "Awal " },
             { data: "metode", title: "Metode", defaultContent: "-" },
-            { data: "status", title: "Status", render: d => d === 'aktif' ? '✅ Aktif' : '❌ Nonaktif' },
+            {
+                data: "status",
+                title: "Status",
+                render: (d) => (d === "aktif" ? "✅ Aktif" : "❌ Nonaktif"),
+            },
 
             {
                 data: "id",
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
@@ -79,7 +99,7 @@ $(function () {
                     Promise.all([
                         loadDonatursForDonasi(),
                         loadZiscos(),
-                        loadJenisDonasis()
+                        loadJenisDonasis(),
                     ]).then(() => {
                         offCanvas.show();
                     });
@@ -94,11 +114,7 @@ $(function () {
     $(document).on("click", ".btn-edit", function () {
         const id = $(this).data("id");
 
-        Promise.all([
-            loadDonatursForDonasi(),
-            loadZiscos(),
-            loadJenisDonasis()
-        ])
+        Promise.all([loadDonatursForDonasi(), loadZiscos(), loadJenisDonasis()])
             .then(() => {
                 return $.get(`/donasis/${id}`);
             })

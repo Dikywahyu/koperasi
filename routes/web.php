@@ -254,6 +254,7 @@ Route::middleware('auth')->group(function () {
     })->name('kwitansi');
     Route::apiResource('kwitansis', KwitansiController::class);
     Route::get('/kwitansi/proses-donasi', [KwitansiController::class, 'prosesDonasiAktif']);
+    Route::get('/kwitansi/cetak/{id}', [KwitansiController::class, 'cetakPdf']);
 
 
 

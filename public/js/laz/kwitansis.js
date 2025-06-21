@@ -16,22 +16,37 @@ $(function () {
                 render: (data, type, row, meta) => meta.row + 1,
             },
             { data: "nomor_transaksi", title: "Nomor Transaksi" },
-            { data: "donasi.donatur.nama", title: "Donasi", defaultContent: "-" },
-            { data: "total", title: "Total", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
-            { data: "komisi_zisco", title: "Komisi Zisco", render: d => `Rp ${parseFloat(d).toLocaleString()}` },
+            {
+                data: "donasi.donatur.nama",
+                title: "Donasi",
+                defaultContent: "-",
+            },
+            {
+                data: "total",
+                title: "Total",
+                render: (d) => `Rp ${parseFloat(d).toLocaleString()}`,
+            },
+            {
+                data: "komisi_zisco",
+                title: "Komisi Zisco",
+                render: (d) => `Rp ${parseFloat(d).toLocaleString()}`,
+            },
             { data: "bulan_donasi", title: "Bulan Donasi" },
             {
                 data: "dicetak",
                 title: "Status Cetak",
-                render: d => d ? "Sudah" : "Belum",
+                render: (d) => (d ? "Sudah" : "Belum"),
             },
             {
                 data: "id",
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
+                    <a href="/kwitansi/cetak/${id}" class="btn btn-success btn-sm" target="_blank">
+                        <i class="ri-printer-line"></i>
+                    </a>
                 `,
             },
         ],
@@ -59,9 +74,15 @@ $(function () {
     function loadDonasi() {
         $.get("/donasis", function (data) {
             const select = $("#kwitansi-donasi");
-            select.empty().append(`<option value="">-- Pilih Donasi --</option>`);
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Donasi --</option>`);
             data.forEach((d) => {
-                select.append(`<option value="${d.id}">${d.donatur?.nama ?? '-'} - Rp ${parseFloat(d.nominal).toLocaleString()}</option>`);
+                select.append(
+                    `<option value="${d.id}">${
+                        d.donatur?.nama ?? "-"
+                    } - Rp ${parseFloat(d.nominal).toLocaleString()}</option>`
+                );
             });
         });
     }

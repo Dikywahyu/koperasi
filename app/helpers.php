@@ -1,0 +1,69 @@
+<?php
+
+if (!function_exists('terbilang')) {
+    function terbilang($angka)
+    {
+        $angka = abs($angka);
+        $baca = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+        $hasil = "";
+
+        if ($angka < 12) {
+            $hasil = " " . $baca[$angka];
+        } elseif ($angka < 20) {
+            $hasil = terbilang($angka - 10) . " Belas";
+        } elseif ($angka < 100) {
+            $hasil = terbilang($angka / 10) . " Puluh" . terbilang($angka % 10);
+        } elseif ($angka < 200) {
+            $hasil = " Seratus" . terbilang($angka - 100);
+        } elseif ($angka < 1000) {
+            $hasil = terbilang($angka / 100) . " Ratus" . terbilang($angka % 100);
+        } elseif ($angka < 2000) {
+            $hasil = " Seribu" . terbilang($angka - 1000);
+        } elseif ($angka < 1000000) {
+            $hasil = terbilang($angka / 1000) . " Ribu" . terbilang($angka % 1000);
+        } elseif ($angka < 1000000000) {
+            $hasil = terbilang($angka / 1000000) . " Juta" . terbilang($angka % 1000000);
+        }
+
+        return trim($hasil);
+    }
+
+    if (!function_exists('tanggal_indo')) {
+        function tanggal_indo($tanggal, $cetak_hari = false)
+        {
+            $hari = [
+                'Minggu',
+                'Senin',
+                'Selasa',
+                'Rabu',
+                'Kamis',
+                'Jumat',
+                'Sabtu'
+            ];
+            $bulan = [
+                1 => 'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember'
+            ];
+
+            $tanggal = \Carbon\Carbon::parse($tanggal);
+            $tgl = $tanggal->day;
+            $bln = $tanggal->month;
+            $thn = $tanggal->year;
+            $hariIndo = $hari[$tanggal->dayOfWeek];
+
+            $format =   $bulan[(int)$bln] . " $thn";
+
+            return $cetak_hari ? "  $format" : $format;
+        }
+    }
+}

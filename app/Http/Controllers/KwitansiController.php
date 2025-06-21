@@ -7,9 +7,30 @@ use App\Models\Kwitansi;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KwitansiController extends Controller
 {
+    public function cetakPdf($id)
+    {
+        $kwitansi = Kwitansi::with(
+            'donasi.donatur.instansi',
+            'donasi.jenisDonasi',
+            'donasi.zisco'
+        )->findOrFail($id);
+
+        // Increment jumlah dicetak
+        $kwitansi->increment('dicetak');
+
+        // Ukuran custom: lebar 33.87cm x tinggi 25.98cm
+        $width = 33.87 * 28.35;
+        $height = 25.98 * 28.35;
+
+        $pdf = Pdf::loadView('kwitansi.cetak', compact('kwitansi'))
+            ->setPaper([0, 0, $width, $height], 'portrait');
+        return $pdf->stream('test.pdf');
+    }
+
 
     public function prosesDonasiAktif()
     {

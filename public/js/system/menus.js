@@ -43,7 +43,7 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     return `
-                        <button class="btn btn-sm btn-warning btn-edit-menu" data-id="${data}">Edit</button>
+                        <button class="btn btn-sm btn-warning btn-edit-menu" data-id="${data}"><i class="ri-edit-box-line"></i></button>
                         <button class="btn btn-sm btn-danger btn-delete-menu" data-id="${data}">Delete</button>
                     `;
                 },

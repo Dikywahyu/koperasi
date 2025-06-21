@@ -38,8 +38,8 @@ $(function () {
                 title: "Actions",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-sm btn-warning btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-sm btn-danger btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-sm btn-warning btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-sm btn-danger btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],

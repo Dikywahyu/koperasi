@@ -1,5 +1,9 @@
 $(function () {
     const table = $(".datatables-basic");
+    const offcanvasImport = document.getElementById(
+        "import-jenis-donasi-record"
+    );
+    const offcanvasJenisDonasiImport = new bootstrap.Offcanvas(offcanvasImport);
     const offCanvasElement = document.getElementById("add-new-record");
     const offCanvas = new bootstrap.Offcanvas(offCanvasElement);
     if (!table.length) return;
@@ -23,8 +27,8 @@ $(function () {
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
@@ -34,12 +38,50 @@ $(function () {
             '<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
             {
-                text: '<i class="ri-add-line"></i> Tambah Jenis Donasi',
+                extend: "collection",
+                className: "btn btn-label-primary dropdown-toggle",
+                text: '<i class="ri-download-line me-1"></i> Export',
+                buttons: ["copy", "csv", "excel", "pdf", "print"].map(
+                    (type) => ({
+                        extend: type,
+                        className: "dropdown-item",
+                    })
+                ),
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-add-line"></i> ',
                 className: "btn btn-primary",
                 action: function () {
                     $("#form-jenis-donasi")[0].reset();
                     $("#jenis-id").val("");
                     offCanvas.show();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-file-add-line me-1"></i>',
+                className: "btn btn-danger",
+                action: function () {
+                    $("#form-import-jenis-donasi")[0].reset();
+                    offcanvasJenisDonasiImport.show(); // pastikan instance offcanvas terdefinisi
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-refresh-line me-1"></i>',
+                className: "btn btn-outline-secondary",
+                action: function () {
+                    table.DataTable().ajax.reload();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
                 },
             },
         ],
@@ -125,6 +167,50 @@ $(function () {
                 Swal.fire(
                     "Gagal",
                     Object.values(xhr.responseJSON.errors).join("<br>"),
+                    "error"
+                );
+            },
+        });
+    });
+
+    // Submit Form Import Jenis Donasi
+    $("#form-import-jenis-donasi").on("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: "/jenis-donasis/import",
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                // Reload table jika ada
+                if ($(".datatables-basic").length) {
+                    $(".datatables-basic").DataTable().ajax.reload();
+                }
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil",
+                    text: "Data berhasil diimport",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+
+                $("#form-import-jenis-donasi")[0].reset();
+                const offcanvasEl = document.getElementById(
+                    "import-jenis-donasi-record"
+                );
+                if (offcanvasEl)
+                    bootstrap.Offcanvas.getInstance(offcanvasEl).hide();
+            },
+            error: function (xhr) {
+                Swal.fire(
+                    "Gagal",
+                    xhr.responseJSON?.message ||
+                        "Terjadi kesalahan saat mengimpor data.",
                     "error"
                 );
             },

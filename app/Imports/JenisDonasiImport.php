@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\JenisDonasi;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class JenisDonasiImport implements ToModel
+class JenisDonasiImport implements ToModel, WithHeadingRow
 {
     /**
      * @param array $row
@@ -16,9 +17,9 @@ class JenisDonasiImport implements ToModel
     {
         return new JenisDonasi([
             //
-            'nama' => $row[0],
-            'jenis' => $row[1],
-            'deskripsi' => $row[2] ?? null,
+            'nama' => $row['nama'],
+            'jenis' => $row['jenis'],
+            'deskripsi' => $row['deskripsi'] ?? null,
         ]);
     }
 }

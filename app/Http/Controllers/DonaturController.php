@@ -20,7 +20,7 @@ class DonaturController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'nullable|exists:users,id',
             'instansi_id' => 'nullable|exists:instansis,id',
             'zisco_id' => 'nullable|exists:ziscos,id',
             'nama' => 'required|string|max:255',

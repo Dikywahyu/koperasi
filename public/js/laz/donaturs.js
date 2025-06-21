@@ -39,8 +39,8 @@ $(function () {
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
@@ -69,8 +69,10 @@ $(function () {
     const loadInstansi = () => {
         return $.get("/instansis", function (data) {
             const select = $("#donatur-instansi");
-            select.empty().append(`<option value="">-- Pilih Instansi --</option>`);
-            data.forEach(i => {
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Instansi --</option>`);
+            data.forEach((i) => {
                 select.append(`<option value="${i.id}">${i.nama}</option>`);
             });
         });
@@ -79,8 +81,10 @@ $(function () {
     const loadZisco = () => {
         return $.get("/ziscos", function (data) {
             const select = $("#donatur-zisco");
-            select.empty().append(`<option value="">-- Pilih Zisco --</option>`);
-            data.forEach(z => {
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Zisco --</option>`);
+            data.forEach((z) => {
                 select.append(`<option value="${z.id}">${z.nama}</option>`);
             });
         });
@@ -90,7 +94,7 @@ $(function () {
         return $.get("/users", function (data) {
             const select = $("#donatur-user");
             select.empty().append(`<option value="">-- Pilih User --</option>`);
-            data.forEach(u => {
+            data.forEach((u) => {
                 select.append(`<option value="${u.id}">${u.name}</option>`);
             });
         });
@@ -115,7 +119,6 @@ $(function () {
                 offCanvas.show();
             });
     });
-
 
     $(document).on("click", ".btn-delete", function () {
         const id = $(this).data("id");

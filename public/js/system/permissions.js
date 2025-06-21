@@ -28,7 +28,7 @@ $(function () {
                 orderable: false,
                 render: function (data) {
                     return `
-                        <button class="btn btn-sm btn-warning btn-edit-permissions" data-id="${data}">Edit</button>
+                        <button class="btn btn-sm btn-warning btn-edit-permissions" data-id="${data}"><i class="ri-edit-box-line"></i></button>
                         <button class="btn btn-sm btn-danger btn-delete-permissions" data-id="${data}">Delete</button>
                     `;
                 },

@@ -93,7 +93,7 @@
                 <!-- User -->
                 <div class="col-sm-12">
                     <div class="form-floating form-floating-outline">
-                        <select id="donatur-user" name="donatur-user" class="form-select" required>
+                        <select id="donatur-user" name="donatur-user" class="form-select">
                             <option value="">-- Pilih User --</option>
                             <!-- Diisi via JS -->
                         </select>

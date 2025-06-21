@@ -22,8 +22,8 @@ $(function () {
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
@@ -33,12 +33,39 @@ $(function () {
             '<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
             {
-                text: '<i class="ri-add-line"></i> Tambah Regional',
+                extend: "collection",
+                className: "btn btn-label-primary dropdown-toggle me-2  ms-2",
+                text: '<i class="ri-download-line"></i> Export',
+                buttons: ["copy", "csv", "excel", "pdf", "print"].map(
+                    (type) => ({
+                        extend: type,
+                        className: "dropdown-item",
+                    })
+                ),
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-add-line"></i> ',
                 className: "btn btn-primary",
                 action: function () {
                     $("#form-regional")[0].reset();
                     $("#regional-id").val("");
                     offCanvas.show();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-refresh-line me-1"></i>',
+                className: "btn btn-outline-secondary",
+                action: function () {
+                    table.DataTable().ajax.reload();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
                 },
             },
         ],

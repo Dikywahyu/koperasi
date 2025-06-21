@@ -290,7 +290,7 @@ $(function () {
               '<button class="btn btn-sm btn-icon btn-text-secondary rounded-pill waves-effect dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line ri-20px"></i></button>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item"><i class="ri-download-line me-2"></i><span>Download</span></a>' +
-              '<a href="javascript:;" class="dropdown-item"><i class="ri-pencil-line me-2"></i><span>Edit</span></a>' +
+              '<a href="javascript:;" class="dropdown-item"><i class="ri-pencil-line me-2"></i><span><i class="ri-edit-box-line"></i></span></a>' +
               '<a href="javascript:;" class="dropdown-item delete-record"><i class="ri-stack-line me-2"></i><span>Duplicate</span></a>' +
               '</div>' +
               '</div>'

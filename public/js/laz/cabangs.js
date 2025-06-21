@@ -1,5 +1,7 @@
 $(function () {
     const table = $(".datatables-basic");
+    const offImportCanvasElement = document.getElementById("import-record");
+    const offImportCanvas = new bootstrap.Offcanvas(offImportCanvasElement);
     const offCanvasElement = document.getElementById("add-new-record");
     const offCanvas = new bootstrap.Offcanvas(offCanvasElement);
     if (!table.length) return;
@@ -29,18 +31,33 @@ $(function () {
                 title: "Aksi",
                 orderable: false,
                 render: (id) => `
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}">Hapus</button>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${id}"><i class="ri-edit-box-line"></i></button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${id}"><i class="ri-delete-bin-5-line"></i></button>
                 `,
             },
         ],
         dom:
-            '<"card-header d-flex justify-content-between align-items-center flex-wrap"<"head-label"><"dt-buttons btn-group me-2"B>>' +
+            '<"card-header d-flex justify-content-between align-items-center flex-wrap"<"head-label"><"dt-buttons d-flex flex-wrap gap-2"B>>' +
             '<"row"<"col-md-6"l><"col-md-6 d-flex justify-content-md-end justify-content-center"f>>t' +
             '<"row"<"col-md-6"i><"col-md-6"p>>',
+
         buttons: [
             {
-                text: '<i class="ri-add-line"></i> Tambah Cabang',
+                extend: "collection",
+                className: "btn btn-label-primary dropdown-toggle",
+                text: '<i class="ri-download-line me-1"></i> Export',
+                buttons: ["copy", "csv", "excel", "pdf", "print"].map(
+                    (type) => ({
+                        extend: type,
+                        className: "dropdown-item",
+                    })
+                ),
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-add-line me-1"></i> ',
                 className: "btn btn-primary",
                 action: function () {
                     $("#form-cabang")[0].reset();
@@ -48,8 +65,35 @@ $(function () {
                     loadRegionals();
                     offCanvas.show();
                 },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-file-add-line me-1"></i>',
+                className: "btn btn-danger",
+                action: function () {
+                    $("#form-cabang")[0].reset();
+                    $("#cabang-id").val("");
+                    loadRegionals();
+                    offImportCanvas.show();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
+            },
+            {
+                text: '<i class="ri-refresh-line me-1"></i>',
+                className: "btn btn-outline-secondary",
+                action: function () {
+                    table.DataTable().ajax.reload();
+                },
+                init: function (api, node) {
+                    node.css("margin", "0.2rem");
+                },
             },
         ],
+
         responsive: true,
         pageLength: 10,
     });
@@ -57,8 +101,10 @@ $(function () {
     const loadRegionals = () => {
         return $.get("/regionals", function (data) {
             const select = $("#cabang-regional");
-            select.empty().append(`<option value="">-- Pilih Regional --</option>`);
-            data.forEach(r => {
+            select
+                .empty()
+                .append(`<option value="">-- Pilih Regional --</option>`);
+            data.forEach((r) => {
                 select.append(`<option value="${r.id}">${r.nama}</option>`);
             });
         });
@@ -152,6 +198,42 @@ $(function () {
                 Swal.fire(
                     "Gagal",
                     Object.values(xhr.responseJSON.errors).join("<br>"),
+                    "error"
+                );
+            },
+        });
+    });
+
+    // Import Cabang Excel
+    $("#form-import-cabang").on("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: "/cabangs/import",
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function () {
+                table.DataTable().ajax.reload();
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil",
+                    text: "Berhasil Tambah",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+                offImportCanvas.hide();
+                $("#form-import-cabang")[0].reset();
+            },
+            error: function (xhr) {
+                Swal.fire(
+                    "Gagal",
+                    "Gagal mengimport data: " + xhr.responseText,
                     "error"
                 );
             },
